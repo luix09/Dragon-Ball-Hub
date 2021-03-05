@@ -93,3 +93,21 @@ class RegisterTextButton extends StatelessWidget {
     );
   }
 }
+
+class ForgotPasswordButton extends StatelessWidget {
+  final String forgotPassText = "Hai dimenticato la password?";
+
+  @override
+  Widget build(BuildContext context) {
+    TextStyle linkStyle = TextStyle(color: const Color(0xFFFF7D45));
+    return RichText(
+      text: TextSpan(
+          text: forgotPassText,
+          style: linkStyle,
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              Navigator.pushNamed(context, "/forgot_password");
+            }),
+    );
+  }
+}

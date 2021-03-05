@@ -64,16 +64,16 @@ class FormWidget extends StatefulWidget {
 class _FormWidgetState extends State<FormWidget> {
 
   final _formKey = GlobalKey<FormState>();
-  static const String invalidEmail = "Invalid email";
+  static const String tooShortEmail = "Email is too short";
   static const String errorMinCharactersPassword =
-      "Password must be at least 4 characters";
+      "Password must be at least 6 characters";
 
   // TODO: modify validation
   String _validateEmail(String email) {
     if (email.isEmpty) {
-      return 'Email';
+      return 'Cannot be empty';
     } else if (email.length < 4) {
-      return invalidEmail;
+      return tooShortEmail;
     }
     return null;
   }
@@ -81,8 +81,8 @@ class _FormWidgetState extends State<FormWidget> {
   // TODO: modify validation
   String _validatePassword(String password) {
     if (password.isEmpty) {
-      return 'Password';
-    } else if (password.length < 4) {
+      return 'Cannot be empty';
+    } else if (password.length < 6) {
       return errorMinCharactersPassword;
     }
     return null;
@@ -104,7 +104,7 @@ class _FormWidgetState extends State<FormWidget> {
                   .value = value,
               decoration: new InputDecoration(
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15))
+                      borderRadius: BorderRadius.all(Radius.circular(30))
                   ),
                   contentPadding:
                   EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
@@ -127,9 +127,11 @@ class _FormWidgetState extends State<FormWidget> {
                 EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
                 hintText: "Password"),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 10),
+          ForgotPasswordButton(),
+          SizedBox(height: 40),
           LoginButtonWidget(_formKey),
-          SizedBox(height: 15),
+          SizedBox(height: 10),
           RegisterTextButton(),
           SizedBox(height: 30),
         ],
