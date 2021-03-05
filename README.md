@@ -1,6 +1,6 @@
 # dragonballhub
 
-A somewhat dragonball app
+A some kind of Dragon Ball app
 
 ## Getting Started
 

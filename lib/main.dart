@@ -1,6 +1,7 @@
 import 'package:dragonballhub/authentication_widget.dart';
 import 'package:dragonballhub/screens/login_screen.dart';
 import 'package:dragonballhub/screens/home_screen.dart';
+import 'package:dragonballhub/screens/pre_login_screen.dart';
 import 'package:dragonballhub/screens/register_screen.dart';
 import 'package:dragonballhub/screens/settings_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/start',
       routes: {
         '/start': (context) => AuthenticationWidget(
-          nonSignedInBuilder: (context) => LoginScreen(),
+          nonSignedInBuilder: (context) => PreLoginScreen(),
           signedInBuilder: (context) => HomeScreen(),
         ),
         '/settings': (context) => SettingsScreen(),

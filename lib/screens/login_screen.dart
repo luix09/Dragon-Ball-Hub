@@ -63,29 +63,27 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(
-          "Login Screen",
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Image.asset('res/logo-dragonballz.png', height: 90),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Container(
-        padding: EdgeInsets.all(36),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            emailField,
-            SizedBox(height: 20),
-            passwordField,
-            SizedBox(height: 20),
-            loginButton,
-            SizedBox(height: 15),
-            RegisterTextButton(),
-          ],
+        body: Container(
+          padding: EdgeInsets.all(36),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              emailField,
+              SizedBox(height: 20),
+              passwordField,
+              SizedBox(height: 20),
+              loginButton,
+              SizedBox(height: 15),
+              RegisterTextButton(),
+            ],
+          ),
         ),
-      ),
-    );
+      );
   }
 }
 
