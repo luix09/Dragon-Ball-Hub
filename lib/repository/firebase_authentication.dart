@@ -5,9 +5,9 @@ class FirebaseAuthRepository {
 
   FirebaseAuthRepository(this.auth);
 
-  Future<void> signInWithEmailAndPassword({String email, String password}) async {
+  Future<UserCredential> signInWithEmail({String email, String password}) async {
     try {
-      await auth.signInWithEmailAndPassword(
+      return await auth.signInWithEmailAndPassword(
           email: email, password: password);
     } catch (e) {
       rethrow;

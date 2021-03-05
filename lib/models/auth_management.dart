@@ -57,11 +57,12 @@ class UserSignInData with ChangeNotifier {
   }
 
 
-  Future<void> signIn() async {
+  Future<User> signIn() async {
     try {
       isLoading = true;
-      await auth.signInWithEmailAndPassword(
+      UserCredential userCredentials = await auth.signInWithEmail(
           email: this.email.value, password: this.password.value);
+      return userCredentials?.user;
     } catch (e) {
       error = e;
       rethrow;

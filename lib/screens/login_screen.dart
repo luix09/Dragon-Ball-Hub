@@ -56,9 +56,12 @@ class _LoginScreenState extends State<LoginScreen> {
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width / 2,
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          onPressed: () {
+          onPressed: () async {
             final user = context.read(loginProvider);
-            user.signIn();
+            await user.signIn();
+            if(user.auth.auth.currentUser != null) {
+              Navigator.pop(context);
+            }
           },
           child: Text(
             "Login",
