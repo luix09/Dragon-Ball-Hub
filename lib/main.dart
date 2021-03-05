@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.red),
+      theme: ThemeData(
+          primarySwatch: Colors.amber,
+          hintColor: Colors.amberAccent),
       title: 'Dragon Ball Hub',
       initialRoute: '/start',
       routes: {

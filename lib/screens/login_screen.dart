@@ -4,6 +4,7 @@ import 'package:dragonballhub/repository/firebase_authentication.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final loginProvider = Provider<UserSignInData>((ref) {
   final authInstance = ref.watch(firebaseAuthProvider);
@@ -22,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final emailField = TextField(
       obscureText: false,
       decoration: InputDecoration(
+          fillColor: Colors.orangeAccent,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: "Email",
           errorText: context.read(loginProvider).email.error,
@@ -48,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final loginButton = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
-        color: Colors.red,
+        color: Colors.orange,
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -64,15 +66,35 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Image.asset('res/logo-dragonballz.png', height: 90),
-          centerTitle: true,
-        ),
+        backgroundColor: const Color(0xFFB0451A),
         body: Container(
           padding: EdgeInsets.all(36),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                child: Column(
+                  children: [
+                    Container(
+                        child: Image.asset("res/sfera-4.png"),
+                      height: 90,
+                    ),
+                    Text(
+                      "DragonBall Hub",
+                      style: GoogleFonts.abel(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          shadows: [
+                            Shadow(
+                                color: Colors.amber,
+                                blurRadius: 2,
+                                offset: Offset(1, 1))
+                          ]),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 80),
               emailField,
               SizedBox(height: 20),
               passwordField,
@@ -92,7 +114,7 @@ class RegisterTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle linkStyle = TextStyle(color: Colors.red);
+    TextStyle linkStyle = TextStyle(color: Colors.orangeAccent);
     return RichText(
       text: TextSpan(
           text: registerText,
