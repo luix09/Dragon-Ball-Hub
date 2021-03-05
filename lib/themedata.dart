@@ -5,7 +5,7 @@ ThemeData myAppTheme = buildTheme();
 ThemeData buildTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-      primaryColor: Colors.amber,
+      primaryColor: const Color(0xFFFF7D45),
       primaryColorDark: Colors.orangeAccent,
       hintColor: Colors.grey
   );

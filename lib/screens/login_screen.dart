@@ -2,10 +2,9 @@ import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/firebase_authentication.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 final loginProvider = Provider<UserSignInData>((ref) {
   final authInstance = ref.watch(firebaseAuthProvider);
@@ -13,101 +12,129 @@ final loginProvider = Provider<UserSignInData>((ref) {
   return userSignIn;
 });
 
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    final emailField = TextField(
-      obscureText: false,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Email",
-          errorText: context.read(loginProvider).email.error,
-          border:
-              OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(32.0))
-      ),
-      onChanged: (String value) {
-        context.read(loginProvider).changeEmail(value);
-      },
-    );
-
-    final passwordField = TextField(
-      obscureText: true,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Password",
-          errorText: context.read(loginProvider).password.error,
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-      onChanged: (String value) {
-        context.read(loginProvider).changePassword(value);
-      },
-    );
-
-    final loginButton = Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(30.0),
-        color: const Color(0xFFFF7D45),
-        child: MaterialButton(
-          minWidth: MediaQuery.of(context).size.width / 2,
-          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          onPressed: () {
-            final user = context.read(loginProvider);
-            user.signIn();
-          },
-          child: Text(
-            "Login",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 17
-            ),
-          ),
-        ));
-
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          decoration: BoxDecoration(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [Colors.orange, Colors.deepOrange]
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [Colors.orange, Colors.deepOrange]
             )
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(25),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TopCenterLogo(),
-                SizedBox(height: 70),
-                Material(
-                  elevation: 7.0,
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
-                    child: Column(
-                      children: [
-                        emailField,
-                        SizedBox(height: 20),
-                        passwordField,
-                        SizedBox(height: 20),
-                        loginButton,
-                        SizedBox(height: 15),
-                        RegisterTextButton(),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(29),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TopCenterLogo(),
+              SizedBox(height: 45),
+              Material(
+                elevation: 7.0,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 30, horizontal: 30),
+                  child: FormWidget(),
+                ),
+              )
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 }
+
+class FormWidget extends StatefulWidget {
+  @override
+  _FormWidgetState createState() => _FormWidgetState();
+}
+
+class _FormWidgetState extends State<FormWidget> {
+
+  final _formKey = GlobalKey<FormState>();
+  static const String invalidEmail = "Invalid email";
+  static const String errorMinCharactersPassword =
+      "Password must be at least 4 characters";
+
+  // TODO: modify validation
+  String _validateEmail(String email) {
+    if (email.isEmpty) {
+      return 'Email';
+    } else if (email.length < 4) {
+      return invalidEmail;
+    }
+    return null;
+  }
+
+  // TODO: modify validation
+  String _validatePassword(String password) {
+    if (password.isEmpty) {
+      return 'Password';
+    } else if (password.length < 4) {
+      return errorMinCharactersPassword;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+              validator: (value) => _validateEmail(value),
+              onChanged: (value) =>
+              context
+                  .read(loginProvider)
+                  .email
+                  .value = value,
+              decoration: new InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15))
+                  ),
+                  contentPadding:
+                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                  hintText: "Email")
+          ),
+          SizedBox(height: 25),
+          TextFormField(
+            obscureText: true,
+            validator: (value) => _validatePassword(value),
+            onChanged: (value) =>
+            context
+                .read(loginProvider)
+                .password
+                .value = value,
+            decoration: new InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))
+                ),
+                contentPadding:
+                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                hintText: "Password"),
+          ),
+          SizedBox(height: 50),
+          LoginButtonWidget(_formKey),
+          SizedBox(height: 15),
+          RegisterTextButton(),
+          SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+}
+
