@@ -17,19 +17,21 @@ class PreLoginScreen extends StatelessWidget {
             children: [
               Expanded(child: Container()),
               Container(
+                height: 125,
                 child: Center(child: Image.asset("res/sfera-4.png")),
               ),
               SizedBox(height: 15),
               Container(
                 child: Text(
                   "Welcome to DragonBall Hub",
-                  style: GoogleFonts.abel(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
+                  style: GoogleFonts.nunito(
+                      letterSpacing: -0.7,
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold,
                       shadows: [
                         Shadow(
                             color: Colors.amber,
-                            blurRadius: 2,
+                            blurRadius: 4,
                             offset: Offset(1, 1))
                       ]),
                 ),
@@ -62,7 +64,7 @@ class BackgroundWidget extends StatelessWidget {
             ),
           ),
           Container(
-            color: Color.fromRGBO(200, 200, 200, 0.60),
+            color: Color.fromRGBO(165, 165, 165, 0.55),
           )
         ]
     );

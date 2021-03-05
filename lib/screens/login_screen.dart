@@ -66,43 +66,51 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xFFB0451A),
         body: Container(
-          padding: EdgeInsets.all(36),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: Column(
-                  children: [
-                    Container(
-                        child: Image.asset("res/sfera-4.png"),
-                      height: 90,
-                    ),
-                    Text(
-                      "DragonBall Hub",
-                      style: GoogleFonts.abel(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          shadows: [
-                            Shadow(
-                                color: Colors.amber,
-                                blurRadius: 2,
-                                offset: Offset(1, 1))
-                          ]),
-                    ),
-                  ],
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomLeft,
+              colors: [Colors.orange, Colors.deepOrange]
+            )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(36),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Column(
+                    children: [
+                      Container(
+                          child: Image.asset("res/sfera-4.png"),
+                        height: 90,
+                      ),
+                      Text(
+                        "DragonBall Hub",
+                        style: GoogleFonts.nunito(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                  color: Colors.amber,
+                                  blurRadius: 3,
+                                  offset: Offset(1, 1))
+                            ]),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 80),
-              emailField,
-              SizedBox(height: 20),
-              passwordField,
-              SizedBox(height: 20),
-              loginButton,
-              SizedBox(height: 15),
-              RegisterTextButton(),
-            ],
+                SizedBox(height: 80),
+                emailField,
+                SizedBox(height: 20),
+                passwordField,
+                SizedBox(height: 20),
+                loginButton,
+                SizedBox(height: 15),
+                RegisterTextButton(),
+              ],
+            ),
           ),
         ),
       );
