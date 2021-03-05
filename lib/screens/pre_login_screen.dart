@@ -7,7 +7,6 @@ class PreLoginScreen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
       body: Stack(
         children: [
           BackgroundWidget(),

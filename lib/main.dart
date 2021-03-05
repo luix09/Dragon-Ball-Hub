@@ -4,6 +4,7 @@ import 'package:dragonballhub/screens/home_screen.dart';
 import 'package:dragonballhub/screens/pre_login_screen.dart';
 import 'package:dragonballhub/screens/register_screen.dart';
 import 'package:dragonballhub/screens/settings_screen.dart';
+import 'package:dragonballhub/themedata.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,9 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.amber,
-          hintColor: Colors.amberAccent),
+      theme: buildTheme(),
       title: 'Dragon Ball Hub',
       initialRoute: '/start',
       routes: {
