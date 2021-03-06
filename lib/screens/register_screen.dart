@@ -140,6 +140,55 @@ class RegisterField extends StatelessWidget {
   }
 }
 
+class RegistrationFormWidget extends StatefulWidget {
+  @override
+  _RegistrationFormWidgetState createState() => _RegistrationFormWidgetState();
+}
+
+class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
+
+  final _formKey = GlobalKey<FormState>();
+  static const String tooShortEmail = "Email is too short";
+  static const String errorMinCharactersPassword =
+      "Password must be at least 6 characters";
+
+  // TODO: modify validation
+  String _validateEmail(String email) {
+    if (email.isEmpty) {
+      return 'Cannot be empty';
+    } else if (email.length < 4) {
+      return tooShortEmail;
+    }
+    return null;
+  }
+
+  // TODO: modify validation
+  String _validatePassword(String password) {
+    if (password.isEmpty) {
+      return 'Cannot be empty';
+    } else if (password.length < 6) {
+      return errorMinCharactersPassword;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          ],
+      ),
+    );
+  }
+}
+
+
+
+
+
 class DatePickerWidget extends StatefulWidget {
   @override
   _DatePickerWidgetState createState() => _DatePickerWidgetState();

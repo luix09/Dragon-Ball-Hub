@@ -1,4 +1,5 @@
 import 'package:dragonballhub/models/user_field.dart';
+import 'package:dragonballhub/repository/auth_exception_handler.dart';
 import 'package:dragonballhub/repository/firebase_authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,7 @@ class UserSignInData with ChangeNotifier {
   bool isLoading = false;
   dynamic error;
 
-  static const String errorMinCharactersEmail = "Email must be at least 3 characters";
   static const String emailNotFound = "Email not found";
-  static const String invalidEmail = "Invalid email";
-  static const String errorMinCharactersPassword =
-      "Password must be at least 3 characters";
 
   UserSignInData({
     @required this.auth,
@@ -36,44 +33,23 @@ class UserSignInData with ChangeNotifier {
     isLoading = false;
   }
 
-  void changeEmail(String value) {
-    this.email.setValue(value);
-    if (value.length <= 3) {
-      this.email.setError(errorMinCharactersEmail);
-    } else {
-      this.email.setError(null);
-    }
-    notifyListeners();
-  }
 
-  void changePassword(String value) {
-    this.password.setValue(value);
-    if (value.length <= 3) {
-      this.password.setError(errorMinCharactersPassword);
-    } else {
-      this.password.setError(null);
-    }
-    notifyListeners();
-  }
-
-
-  Future<User> signIn() async {
+  Future<AuthResultStatus> signIn() async {
     try {
-      isLoading = true;
-      UserCredential userCredentials = await auth.signInWithEmail(
+      final status = await auth.signInWithEmailAndPassword(
           email: this.email.value, password: this.password.value);
-      return userCredentials?.user;
+      return status;
     } catch (e) {
       error = e;
       rethrow;
     } finally {
-      isLoading = false;
       notifyListeners();
     }
   }
 
   Future<void> signOut() async {
     await auth.signOut();
+    notifyListeners();
   }
 }
 
