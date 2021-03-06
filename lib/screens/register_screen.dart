@@ -118,24 +118,24 @@ class RegisterField extends StatelessWidget {
       this.onChangedField,
       this.onTap});
 
-  final bool obscureText;
-  final String hintText;
-  String errorText;
-  Function onChangedField;
-  Function onTap;
+  final bool? obscureText;
+  final String? hintText;
+  String? errorText;
+  Function? onChangedField;
+  Function? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      obscureText: this.obscureText,
+      obscureText: this.obscureText!,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: this.hintText,
           errorText: this.errorText,
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-      onChanged: this.onChangedField,
-      onTap: this.onTap,
+      onChanged: this.onChangedField as void Function(String)?,
+      onTap: this.onTap as void Function()?,
     );
   }
 }
@@ -153,7 +153,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
       "Password must be at least 6 characters";
 
   // TODO: modify validation
-  String _validateEmail(String email) {
+  String? _validateEmail(String email) {
     if (email.isEmpty) {
       return 'Cannot be empty';
     } else if (email.length < 4) {
@@ -163,7 +163,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
   }
 
   // TODO: modify validation
-  String _validatePassword(String password) {
+  String? _validatePassword(String password) {
     if (password.isEmpty) {
       return 'Cannot be empty';
     } else if (password.length < 6) {
@@ -195,7 +195,7 @@ class DatePickerWidget extends StatefulWidget {
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
-  DateTime _selectedDate;
+  DateTime? _selectedDate;
   TextEditingController _textEditingController = TextEditingController();
   final String hintText = "Data di nascita";
 
@@ -204,7 +204,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     super.initState();
     _selectedDate = DateTime(2000);
     _textEditingController = new TextEditingController(
-        text: DateFormat("dd-MM-yyyy").format(_selectedDate));
+        text: DateFormat("dd-MM-yyyy").format(_selectedDate!));
     context.read(registrationProvider).birthDate = _selectedDate;
   }
 
@@ -226,12 +226,12 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   }
 
   Future<void>_selectDate(BuildContext context) async {
-    DateTime newSelectedDate = await showDatePicker(
+    DateTime? newSelectedDate = await showDatePicker(
         context: context,
-        initialDate: _selectedDate != null ? _selectedDate : DateTime(2000),
+        initialDate: _selectedDate != null ? _selectedDate! : DateTime(2000),
         firstDate: DateTime(1920),
         lastDate: DateTime(2008),
-        builder: (BuildContext context, Widget child) {
+        builder: (BuildContext context, Widget? child) {
           return Theme(
             data: ThemeData.light().copyWith(
               colorScheme: ColorScheme.light(
@@ -242,7 +242,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
               ),
               dialogBackgroundColor: Colors.white,
             ),
-            child: child,
+            child: child!,
           );
         });
 
@@ -251,7 +251,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       setState(() {
         _selectedDate = newSelectedDate;
         _textEditingController
-          ..text = europeanFormat.format(_selectedDate);
+          ..text = europeanFormat.format(_selectedDate!);
       });
 
     }

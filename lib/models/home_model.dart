@@ -1,3 +1,3 @@
 class HomeModel {
-  String home;
+  String? home;
 }

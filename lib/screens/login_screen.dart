@@ -69,7 +69,7 @@ class _FormWidgetState extends State<FormWidget> {
       "Password must be at least 6 characters";
 
   // TODO: modify validation
-  String _validateEmail(String email) {
+  String? _validateEmail(String email) {
     if (email.isEmpty) {
       return 'Cannot be empty';
     } else if (email.length < 4) {
@@ -79,7 +79,7 @@ class _FormWidgetState extends State<FormWidget> {
   }
 
   // TODO: modify validation
-  String _validatePassword(String password) {
+  String? _validatePassword(String password) {
     if (password.isEmpty) {
       return 'Cannot be empty';
     } else if (password.length < 6) {
@@ -96,7 +96,7 @@ class _FormWidgetState extends State<FormWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-              validator: (value) => _validateEmail(value),
+              validator: (value) => _validateEmail(value!),
               onChanged: (value) =>
               context
                   .read(loginProvider)
@@ -114,7 +114,7 @@ class _FormWidgetState extends State<FormWidget> {
           SizedBox(height: 25),
           TextFormField(
             obscureText: true,
-            validator: (value) => _validatePassword(value),
+            validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
             context
                 .read(loginProvider)

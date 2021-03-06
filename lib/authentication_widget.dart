@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/all.dart';
 
 class AuthenticationWidget extends ConsumerWidget {
   const AuthenticationWidget({
-    Key key,
-    @required this.signedInBuilder,
-    @required this.nonSignedInBuilder,
+    Key? key,
+    required this.signedInBuilder,
+    required this.nonSignedInBuilder,
   }) : super(key: key);
 
   final WidgetBuilder signedInBuilder;
@@ -31,7 +31,7 @@ class AuthenticationWidget extends ConsumerWidget {
     );
   }
 
-  Widget _data(BuildContext context, User user) {
+  Widget _data(BuildContext context, User? user) {
     if (user != null) {
       return signedInBuilder(context);
     }

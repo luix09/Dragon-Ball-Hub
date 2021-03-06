@@ -4,10 +4,10 @@ import 'auth_exception_handler.dart';
 
 class FirebaseAuthRepository {
   final FirebaseAuth auth;
-  AuthResultStatus _status;
+  AuthResultStatus? _status;
   FirebaseAuthRepository(this.auth);
 
-  Future<AuthResultStatus> signInWithEmailAndPassword({String email, String password}) async {
+  Future<AuthResultStatus?> signInWithEmailAndPassword({required String email, required String password}) async {
     try {
       final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -21,7 +21,7 @@ class FirebaseAuthRepository {
     return _status;
   }
 
-  Future<UserCredential> signUpWithEmailAndPassword({String email, String password}) async {
+  Future<UserCredential> signUpWithEmailAndPassword({required String email, required String password}) async {
     try {
       return await auth.createUserWithEmailAndPassword(
           email: email, password: password);

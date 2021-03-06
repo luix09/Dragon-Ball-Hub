@@ -76,7 +76,7 @@ class MyBlinkingButton extends StatefulWidget {
 
 class _MyBlinkingButtonState extends State<MyBlinkingButton>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   void initState() {

@@ -21,9 +21,9 @@ class _NewsContainerState extends State<NewsContainer> {
         return ListTile(
           title: Consumer(
             builder: (context, watch, child){
-              final listTexts = watch(listProvider(fakeSize));
+              final listTexts = watch(listProvider!(fakeSize));
               return Text('${listTexts[index]}');
-            },
+            } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?),
           )
         );
       },

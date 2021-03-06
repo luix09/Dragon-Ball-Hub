@@ -47,9 +47,9 @@ class LoginButtonWidget extends StatelessWidget {
           minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           onPressed: () async {
-            if(formKey.currentState.validate()) {
+            if(formKey.currentState!.validate()) {
               final userCreds = context.read(loginProvider);
-              AuthResultStatus status = await userCreds.signIn();
+              AuthResultStatus? status = await userCreds.signIn();
               print(status);
               if(status == AuthResultStatus.successful) {
                 ScaffoldMessenger

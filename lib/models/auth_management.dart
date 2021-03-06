@@ -14,7 +14,7 @@ class UserSignInData with ChangeNotifier {
   static const String emailNotFound = "Email not found";
 
   UserSignInData({
-    @required this.auth,
+    required this.auth,
     email = '',
     password = '',
   });
@@ -34,7 +34,7 @@ class UserSignInData with ChangeNotifier {
   }
 
 
-  Future<AuthResultStatus> signIn() async {
+  Future<AuthResultStatus?> signIn() async {
     try {
       final status = await auth.signInWithEmailAndPassword(
           email: this.email.value, password: this.password.value);
@@ -59,20 +59,20 @@ class UserSignUpData with ChangeNotifier {
   final FirebaseAuthRepository auth;
   UserField nome = UserField();
   UserField cognome = UserField();
-  DateTime birthDate = DateTime(2000);
+  DateTime? birthDate = DateTime(2000);
   UserField email = UserField();
   UserField password = UserField();
 
 
   UserSignUpData({
-    @required this.auth,
+    required this.auth,
   });
 
 
   Future<void> verifyEmail() async {
-    User user = FirebaseAuth.instance.currentUser;
+    User? user = FirebaseAuth.instance.currentUser;
 
-    if (!user.emailVerified) {
+    if (!user!.emailVerified) {
       await user.sendEmailVerification();
     }
   }
