@@ -44,7 +44,7 @@ class LoginButtonWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
         color: const Color(0xFFFF7D45),
         child: MaterialButton(
-          minWidth: MediaQuery.of(context).size.width / 2,
+          minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           onPressed: () async {
             if(formKey.currentState.validate()) {
@@ -99,7 +99,10 @@ class ForgotPasswordButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle linkStyle = TextStyle(color: const Color(0xFFFF7D45));
+    TextStyle linkStyle = TextStyle(
+        fontSize: 12,
+        color: const Color(0xFFFFAD88)
+    );
     return RichText(
       text: TextSpan(
           text: forgotPassText,

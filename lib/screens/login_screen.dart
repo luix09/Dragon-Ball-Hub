@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 30, horizontal: 30),
+                      vertical: 30, horizontal: 20),
                   child: FormWidget(),
                 ),
               )
@@ -103,8 +103,9 @@ class _FormWidgetState extends State<FormWidget> {
                   .email
                   .value = value,
               decoration: new InputDecoration(
+                  icon: Icon(Icons.email),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30))
+                      borderRadius: BorderRadius.all(Radius.circular(25))
                   ),
                   contentPadding:
                   EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
@@ -120,15 +121,18 @@ class _FormWidgetState extends State<FormWidget> {
                 .password
                 .value = value,
             decoration: new InputDecoration(
+              icon: Icon(Icons.lock_outline),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30))
+                  borderRadius: BorderRadius.all(Radius.circular(25))
                 ),
                 contentPadding:
                 EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
                 hintText: "Password"),
           ),
           SizedBox(height: 10),
-          ForgotPasswordButton(),
+          Align(
+              alignment: Alignment.centerRight,
+              child: ForgotPasswordButton()),
           SizedBox(height: 40),
           LoginButtonWidget(_formKey),
           SizedBox(height: 10),
