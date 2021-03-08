@@ -1,7 +1,7 @@
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final myProvider = Provider((ref) => "Hello Flutter!");
 
@@ -23,7 +23,7 @@ class _NewsContainerState extends State<NewsContainer> {
             builder: (context, watch, child){
               final listTexts = watch(listProvider!(fakeSize));
               return Text('${listTexts[index]}');
-            } as Widget Function(BuildContext, T Function<T>(ProviderBase<Object?, T>), Widget?),
+            },
           )
         );
       },

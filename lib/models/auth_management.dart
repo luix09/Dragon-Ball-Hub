@@ -19,14 +19,6 @@ class UserSignInData with ChangeNotifier {
     password = '',
   });
 
-  bool get isValid {
-    if (email.value != null && password.value != null){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   void resetData() {
     email = UserField();
     password = UserField();

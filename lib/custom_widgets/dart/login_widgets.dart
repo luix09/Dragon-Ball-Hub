@@ -1,5 +1,4 @@
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
-import 'package:dragonballhub/repository/firebase_authentication.dart';
 import 'package:dragonballhub/screens/login_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +70,7 @@ class LoginButtonWidget extends StatelessWidget {
                 fontSize: 17
             ),
           ),
-        ));;
+        ));
   }
 }
 

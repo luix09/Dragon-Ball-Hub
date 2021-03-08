@@ -1,5 +1,4 @@
 import 'package:dragonballhub/authentication_widget.dart';
-import 'package:dragonballhub/screens/login_screen.dart';
 import 'package:dragonballhub/screens/home_screen.dart';
 import 'package:dragonballhub/screens/pre_login_screen.dart';
 import 'package:dragonballhub/screens/register_screen.dart';
