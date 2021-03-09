@@ -1,30 +1,28 @@
 import 'package:dragonballhub/models/user_field.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
-import 'package:dragonballhub/repository/firebase_authentication.dart';
+import 'package:dragonballhub/repository/firebase_auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserSignInData with ChangeNotifier {
-  final FirebaseAuthRepository auth;
+class UserSignInData extends StateNotifier<AuthResultStatus> {
+  final FirebaseAuthHelper auth;
   UserField email = UserField();
   UserField password = UserField();
   bool isLoading = false;
   dynamic error;
 
-  static const String emailNotFound = "Email not found";
-
   UserSignInData({
     required this.auth,
     email = '',
     password = '',
-  });
+  }) : super(AuthResultStatus.undefined);
 
   void resetData() {
     email = UserField();
     password = UserField();
     isLoading = false;
   }
-
 
   Future<AuthResultStatus?> signIn() async {
     try {
@@ -34,21 +32,18 @@ class UserSignInData with ChangeNotifier {
     } catch (e) {
       error = e;
       rethrow;
-    } finally {
-      notifyListeners();
     }
   }
 
   Future<void> signOut() async {
     await auth.signOut();
-    notifyListeners();
   }
 }
 
 //--------------------------------------------------------------------------------
 
 class UserSignUpData with ChangeNotifier {
-  final FirebaseAuthRepository auth;
+  final FirebaseAuthHelper auth;
   UserField nome = UserField();
   UserField cognome = UserField();
   DateTime? birthDate = DateTime(2000);

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TopCenterLogo extends StatelessWidget {
+class TopCenterBallLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -47,13 +47,9 @@ class LoginButtonWidget extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           onPressed: () async {
             if(formKey.currentState!.validate()) {
-              final userCreds = context.read(loginProvider);
-              AuthResultStatus? status = await userCreds.signIn();
-              print(status);
+              final user = context.read(loginProvider);
+              AuthResultStatus? status = await user.signIn();
               if(status == AuthResultStatus.successful) {
-                ScaffoldMessenger
-                    .of(context)
-                    .showSnackBar(SnackBar(content: Text('Logged in')));
                 Navigator.pop(context);
               }
               else {

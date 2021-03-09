@@ -1,4 +1,5 @@
 import 'package:dragonballhub/authentication_widget.dart';
+import 'package:dragonballhub/screens/forgot_password.dart';
 import 'package:dragonballhub/screens/home_screen.dart';
 import 'package:dragonballhub/screens/pre_login_screen.dart';
 import 'package:dragonballhub/screens/register_screen.dart';
@@ -18,7 +19,12 @@ Future<void> main() async {
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,6 +39,7 @@ class MyApp extends StatelessWidget {
         ),
         '/settings': (context) => SettingsScreen(),
         "/register": (context) => RegisterScreen(),
+        "/forgot_password": (context) => ForgotPassword(),
       },
     );
   }

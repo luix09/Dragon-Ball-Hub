@@ -1,13 +1,15 @@
+import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
+import 'package:dragonballhub/custom_widgets/dart/signup_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
-import 'package:dragonballhub/repository/firebase_authentication.dart';
+import 'package:dragonballhub/repository/firebase_auth_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 final registrationProvider = Provider<UserSignUpData>((ref) {
   final authInstance = ref.watch(firebaseAuthProvider);
-  final userSignUp = UserSignUpData(auth: FirebaseAuthRepository(authInstance));
+  final userSignUp = UserSignUpData(auth: FirebaseAuthHelper(authInstance));
   return userSignUp;
 });
 
@@ -22,123 +24,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text("Registration Screen"),
-      ),
       body: Container(
-        padding: EdgeInsets.all(36),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            RegisterField(
-              obscureText: false,
-              hintText: "Nome",
-              errorText: context.read(registrationProvider).nome.error,
-              onChangedField: (String value) {
-                context.read(registrationProvider).nome.setValue(value);
-              },
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            RegisterField(
-              obscureText: false,
-              hintText: "Cognome",
-              errorText: context.read(registrationProvider).cognome.error,
-              onChangedField: (String value) {
-                context.read(registrationProvider).cognome.setValue(value);
-              },
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            DatePickerWidget(), // TODO: send date to the register provider
-            SizedBox(
-              height: 40,
-            ),
-            RegisterField(
-              obscureText: false,
-              hintText: "Email",
-              errorText: context.read(registrationProvider).email.error,
-              onChangedField: (String value) {
-                context.read(registrationProvider).email.setValue(value);
-              },
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            RegisterField(
-              obscureText: true,
-              hintText: "Password",
-              errorText: context.read(registrationProvider).password.error,
-              onChangedField: (String value) {
-                context.read(registrationProvider).password.setValue(value);
-              },
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 75),
-              child: Material(
-                  elevation: 5.0,
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Colors.red,
-                  child: MaterialButton(
-                    minWidth: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    onPressed: () {
-                      print(
-                        "${context.read(registrationProvider).nome.value}\n"
-                        "${context.read(registrationProvider).cognome.value}\n"
-                            "${context.read(registrationProvider).birthDate}\n"
-                            "${context.read(registrationProvider).email.value}\n"
-                            "${context.read(registrationProvider).password.value}\n"
-                      );
-                      context.read(registrationProvider).signUpEmail();
-                    },
-                    child: Text(
-                      "Sign Up",
-                      textAlign: TextAlign.center,
-                    ),
-                  )),
+        padding: EdgeInsets.all(29),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [Colors.orange, Colors.deepOrange]
             )
-          ],
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TopCenterGokuLogo(),
+              SizedBox(height: 25),
+              Material(
+                elevation: 7.0,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 30, horizontal: 20),
+                  child: RegistrationFormWidget(),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class RegisterField extends StatelessWidget {
-  RegisterField(
-      {this.obscureText,
-      this.hintText,
-      this.errorText,
-      this.onChangedField,
-      this.onTap});
-
-  final bool? obscureText;
-  final String? hintText;
-  String? errorText;
-  Function? onChangedField;
-  Function? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      obscureText: this.obscureText!,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: this.hintText,
-          errorText: this.errorText,
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-      onChanged: this.onChangedField as void Function(String)?,
-      onTap: this.onTap as void Function()?,
-    );
-  }
-}
 
 class RegistrationFormWidget extends StatefulWidget {
   @override
@@ -179,6 +96,79 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          TextFormField(
+              validator: (value) => _validateEmail(value!),
+              onChanged: (value) =>
+              context
+                  .read(registrationProvider)
+                  .email
+                  .value = value,
+              decoration: new InputDecoration(
+                  icon: Icon(Icons.person),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25))
+                  ),
+                  contentPadding:
+                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                  hintText: "Nome")
+          ),
+          SizedBox(height: 25),
+          TextFormField(
+            validator: (value) => _validatePassword(value!),
+            onChanged: (value) =>
+            context
+                .read(registrationProvider)
+                .password
+                .value = value,
+            decoration: new InputDecoration(
+                icon: Icon(Icons.person),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))
+                ),
+                contentPadding:
+                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                hintText: "Cognome"),
+          ),
+          SizedBox(height: 25),
+          DatePickerWidget(),
+          SizedBox(height: 25),
+          TextFormField(
+            validator: (value) => _validatePassword(value!),
+            onChanged: (value) =>
+            context
+                .read(registrationProvider)
+                .password
+                .value = value,
+            decoration: new InputDecoration(
+                icon: Icon(Icons.email_outlined),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))
+                ),
+                contentPadding:
+                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                hintText: "Email"),
+          ),
+          SizedBox(height: 25),
+          TextFormField(
+            obscureText: true,
+            validator: (value) => _validatePassword(value!),
+            onChanged: (value) =>
+            context
+                .read(registrationProvider)
+                .password
+                .value = value,
+            decoration: new InputDecoration(
+                icon: Icon(Icons.lock_outline),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))
+                ),
+                contentPadding:
+                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                hintText: "Password"),
+          ),
+          SizedBox(height: 30),
+          SignUpButtonWidget(_formKey),
+
           ],
       ),
     );
@@ -210,10 +200,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       focusNode: AlwaysDisabledFocusNode(),
       controller: _textEditingController,
       decoration: InputDecoration(
+        icon: Icon(Icons.calendar_today),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: hintText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),

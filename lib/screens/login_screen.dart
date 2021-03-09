@@ -1,14 +1,14 @@
 import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
-import 'package:dragonballhub/repository/firebase_authentication.dart';
+import 'package:dragonballhub/repository/firebase_auth_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-final loginProvider = Provider<UserSignInData>((ref) {
+final loginProvider = StateNotifierProvider<UserSignInData>((ref) {
   final authInstance = ref.watch(firebaseAuthProvider);
-  final userSignIn = UserSignInData(auth: FirebaseAuthRepository(authInstance));
+  final userSignIn = UserSignInData(auth: FirebaseAuthHelper(authInstance));
   return userSignIn;
 });
 
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TopCenterLogo(),
+              TopCenterBallLogo(),
               SizedBox(height: 45),
               Material(
                 elevation: 7.0,
@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 30, horizontal: 20),
-                  child: FormWidget(),
+                  child: LoginFormWidget(),
                 ),
               )
             ],
@@ -57,12 +57,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class FormWidget extends StatefulWidget {
+class LoginFormWidget extends StatefulWidget {
   @override
-  _FormWidgetState createState() => _FormWidgetState();
+  _LoginFormWidgetState createState() => _LoginFormWidgetState();
 }
 
-class _FormWidgetState extends State<FormWidget> {
+class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   final _formKey = GlobalKey<FormState>();
   static const String tooShortEmail = "Email is too short";
@@ -136,7 +136,7 @@ class _FormWidgetState extends State<FormWidget> {
               child: ForgotPasswordButton()),
           SizedBox(height: 40),
           LoginButtonWidget(_formKey),
-          SizedBox(height: 10),
+          SizedBox(height: 17),
           RegisterTextButton(),
           SizedBox(height: 30),
         ],
