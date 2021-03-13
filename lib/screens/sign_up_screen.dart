@@ -1,4 +1,3 @@
-import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/custom_widgets/dart/signup_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
@@ -127,7 +126,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
                 hintText: "Cognome"),
           ),
           SizedBox(height: 25),
-          DatePickerWidget(),
+          DatePickerSignUpWidget(),
           SizedBox(height: 25),
           TextFormField(
             validator: (value) => _validatePassword(value!),
@@ -163,12 +162,13 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
   }
 }
 
-class DatePickerWidget extends StatefulWidget {
+
+class DatePickerSignUpWidget extends StatefulWidget {
   @override
-  _DatePickerWidgetState createState() => _DatePickerWidgetState();
+  _DatePickerSignUpWidgetState createState() => _DatePickerSignUpWidgetState();
 }
 
-class _DatePickerWidgetState extends State<DatePickerWidget> {
+class _DatePickerSignUpWidgetState extends State<DatePickerSignUpWidget> {
   DateTime? _selectedDate;
   TextEditingController _textEditingController = TextEditingController();
   final String hintText = "Data di nascita";
@@ -186,13 +186,13 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   Widget build(BuildContext context) {
     return TextFormField(
       focusNode: AlwaysDisabledFocusNode(),
-      controller: _textEditingController,
       decoration: InputDecoration(
         icon: Icon(Icons.calendar_today),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: hintText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
       ),
+      controller: _textEditingController,
       onTap: () {
         _selectDate(context);
       },

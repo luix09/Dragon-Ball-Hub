@@ -1,4 +1,4 @@
-import 'package:dragonballhub/screens/login_screen.dart';
+import 'package:dragonballhub/screens/sign_in_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
