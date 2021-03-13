@@ -27,6 +27,8 @@ dependencies:
   http_parser: ^4.0.0
   intl: ^0.17.0
   source_span: ^1.8.1
+  auth_buttons: ^1.0.0
+  font_awesome_flutter: ^9.0.0-nullsafety
 
 dev_dependencies:
   #flutter_test:

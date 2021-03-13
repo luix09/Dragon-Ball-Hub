@@ -20,7 +20,7 @@ class TopCenterBallLogo extends StatelessWidget {
           Text(
             "DragonBall Hub",
             style: GoogleFonts.nunito(
-                fontSize: SizeConfig.textMultiplier * 4.5,
+                fontSize: SizeConfig.textMultiplier * 4,
                 fontWeight: FontWeight.bold,
                 shadows: [
                   Shadow(
@@ -110,3 +110,36 @@ class ForgotPasswordButton extends StatelessWidget {
     );
   }
 }
+
+class SocialDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Divider(
+            color: Colors.black,
+            height: 8.0,
+          ),
+        ),
+        SizedBox(
+          width: 8.0,
+        ),
+        Text(
+          'OR',
+          style: TextStyle(color: Colors.black),
+        ),
+        SizedBox(
+          width: 8.0,
+        ),
+        Expanded(
+          child: Divider(
+            color: Colors.black,
+            height: 8.0,
+          ),
+        )
+      ],
+    );
+  }
+}
+

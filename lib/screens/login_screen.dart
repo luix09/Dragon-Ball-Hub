@@ -1,3 +1,4 @@
+import 'package:auth_buttons/res/shared/auth_style.dart';
 import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
@@ -5,6 +6,8 @@ import 'package:dragonballhub/repository/firebase_auth_helper.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auth_buttons/auth_buttons.dart'
+    show GoogleAuthButton, FacebookAuthButton, AuthButtonStyle;
 
 
 final loginProvider = StateNotifierProvider<UserSignInData>((ref) {
@@ -35,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
             )
         ),
         child: Padding(
-          padding: EdgeInsets.all(SizeConfig.imageSizeMultiplier * 6.5),
+          padding: EdgeInsets.all(SizeConfig.imageSizeMultiplier * 6),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -140,6 +143,30 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           SizedBox(height: 15),
           RegisterTextButton(),
           SizedBox(height: 20),
+          SocialDivider(),
+          SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GoogleAuthButton(
+                onPressed: () {},
+                darkMode: false,
+                style: AuthButtonStyle.icon,
+                iconSize: SizeConfig.imageSizeMultiplier * 6,
+                height: SizeConfig.heightMultiplier * 6,
+                width: SizeConfig.heightMultiplier * 6,
+              ),
+              SizedBox(width: 10),
+              FacebookAuthButton(
+                onPressed: () {},
+                darkMode: false,
+                style: AuthButtonStyle.icon,
+                iconSize: SizeConfig.imageSizeMultiplier * 6,
+                height: SizeConfig.heightMultiplier * 6,
+                width: SizeConfig.heightMultiplier * 6,
+              ),
+            ],
+          )
         ],
       ),
     );
