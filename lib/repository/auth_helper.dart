@@ -2,20 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'auth_exception_handler.dart';
 
-class FirebaseAuthHelper {
+class AuthHelper {
   final FirebaseAuth auth;
   AuthResultStatus? _status;
-  FirebaseAuthHelper(this.auth);
+  AuthHelper({required this.auth});
 
-  Future<AuthResultStatus?> signInWithEmailAndPassword({required String email, required String password}) async {
+  Future<AuthResultStatus?> userSignInEmail({required String email, required String password}) async {
     try {
       final authResult = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      if(authResult.user != null) {
+      if(authResult.user != null)
         _status = AuthResultStatus.successful;
-      }
+
     } catch (e) {
-      print('Exception @createAccount: $e');
+      print('Exception: $e');
       _status = AuthExceptionHandler.handleException(e);
     }
     return _status;

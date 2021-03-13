@@ -49,14 +49,15 @@ class LoginButtonWidget extends StatelessWidget {
           onPressed: () async {
             if(formKey.currentState!.validate()) {
               final user = context.read(loginProvider);
-              AuthResultStatus? status = await user.signIn();
-              if(status == AuthResultStatus.successful) {
+              await user.signIn();
+
+              if(user.state == AuthResultStatus.successful) {
                 Navigator.pop(context);
               }
               else {
                 ScaffoldMessenger
                     .of(context)
-                    .showSnackBar(SnackBar(content: Text('${AuthExceptionHandler.generateExceptionMessage(status)}')));
+                    .showSnackBar(SnackBar(content: Text('${user.generateStateMsg()}')));
               }
             }
           },

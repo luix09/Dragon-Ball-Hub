@@ -1,34 +1,33 @@
-import 'package:dragonballhub/models/user_field.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
-import 'package:dragonballhub/repository/firebase_auth_helper.dart';
+import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserSignInData extends StateNotifier<AuthResultStatus> {
-  final FirebaseAuthHelper auth;
-  UserField email = UserField();
-  UserField password = UserField();
-  bool isLoading = false;
+class UserSignInData extends StateNotifier<AuthResultStatus?> {
+  final AuthHelper auth;
+  String email = "";
+  String password = "";
   dynamic error;
 
   UserSignInData({
     required this.auth,
-    email = '',
-    password = '',
   }) : super(AuthResultStatus.undefined);
 
   void resetData() {
-    email = UserField();
-    password = UserField();
-    isLoading = false;
+    email = "";
+    password = "";
+  }
+
+  String generateStateMsg() {
+    return AuthExceptionHandler.generateExceptionMessage(state);
   }
 
   Future<AuthResultStatus?> signIn() async {
     try {
-      final status = await auth.signInWithEmailAndPassword(
-          email: this.email.value, password: this.password.value);
-      return status;
+      state = await auth.userSignInEmail(
+          email: this.email, password: this.password);
+      return state;
     } catch (e) {
       error = e;
       rethrow;
@@ -43,12 +42,12 @@ class UserSignInData extends StateNotifier<AuthResultStatus> {
 //--------------------------------------------------------------------------------
 
 class UserSignUpData with ChangeNotifier {
-  final FirebaseAuthHelper auth;
-  UserField nome = UserField();
-  UserField cognome = UserField();
+  final AuthHelper auth;
+  String nome = "";
+  String cognome = "";
   DateTime? birthDate = DateTime(2000);
-  UserField email = UserField();
-  UserField password = UserField();
+  String email = "";
+  String password = "";
 
 
   UserSignUpData({
@@ -68,17 +67,13 @@ class UserSignUpData with ChangeNotifier {
   Future<void> signUpEmail() async {
     try {
       UserCredential userCredential = await auth.signUpWithEmailAndPassword(
-          email: this.email.value.toString(),
-          password: this.password.value.toString()
+          email: this.email,
+          password: this.password
       ).catchError((e) {
         print(e);
       });
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        this.password.error = "The password is too weak";
-      } else if (e.code == 'email-already-in-use') {
-        this.email.error = "Email is already taken. Choose a new one.";
-      }
+      print(e);
     } catch (e) {
       print(e);
     } finally {

@@ -2,7 +2,7 @@ import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/custom_widgets/dart/signup_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
-import 'package:dragonballhub/repository/firebase_auth_helper.dart';
+import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 final registrationProvider = Provider<UserSignUpData>((ref) {
   final authInstance = ref.watch(firebaseAuthProvider);
-  final userSignUp = UserSignUpData(auth: FirebaseAuthHelper(authInstance));
+  final userSignUp = UserSignUpData(auth: AuthHelper(auth: authInstance));
   return userSignUp;
 });
 
@@ -105,7 +105,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
           TextFormField(
               validator: (value) => _validateEmail(value!),
               onChanged: (value) =>
-                  context.read(registrationProvider).email.value = value,
+                  context.read(registrationProvider).email= value,
               decoration: new InputDecoration(
                   icon: Icon(Icons.person),
                   border: OutlineInputBorder(
@@ -117,7 +117,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
           TextFormField(
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
-                context.read(registrationProvider).password.value = value,
+                context.read(registrationProvider).password = value,
             decoration: new InputDecoration(
                 icon: Icon(Icons.person),
                 border: OutlineInputBorder(
@@ -132,7 +132,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
           TextFormField(
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
-                context.read(registrationProvider).password.value = value,
+                context.read(registrationProvider).password = value,
             decoration: new InputDecoration(
                 icon: Icon(Icons.email_outlined),
                 border: OutlineInputBorder(
@@ -146,7 +146,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
             obscureText: true,
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
-                context.read(registrationProvider).password.value = value,
+                context.read(registrationProvider).password = value,
             decoration: new InputDecoration(
                 icon: Icon(Icons.lock_outline),
                 border: OutlineInputBorder(

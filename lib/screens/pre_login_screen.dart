@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 class PreLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: LayoutBuilder(
         builder: (context, constraints) => Stack(
           children: [

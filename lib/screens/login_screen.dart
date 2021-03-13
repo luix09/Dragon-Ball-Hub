@@ -2,7 +2,7 @@ import 'package:auth_buttons/res/shared/auth_style.dart';
 import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
-import 'package:dragonballhub/repository/firebase_auth_helper.dart';
+import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +12,7 @@ import 'package:auth_buttons/auth_buttons.dart'
 
 final loginProvider = StateNotifierProvider<UserSignInData>((ref) {
   final authInstance = ref.watch(firebaseAuthProvider);
-  final userSignIn = UserSignInData(auth: FirebaseAuthHelper(authInstance));
+  final userSignIn = UserSignInData(auth: AuthHelper(auth: authInstance));
   return userSignIn;
 });
 
@@ -72,6 +72,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   static const String tooShortEmail = "Email is too short";
   static const String errorMinCharactersPassword =
       "Password must be at least 6 characters";
+  bool _showPassword = false;
 
   // TODO: modify validation
   String? _validateEmail(String email) {
@@ -105,8 +106,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               onChanged: (value) =>
               context
                   .read(loginProvider)
-                  .email
-                  .value = value,
+                  .email = value,
               decoration: new InputDecoration(
                   icon: Icon(Icons.email),
                   border: OutlineInputBorder(
@@ -118,14 +118,23 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           ),
           SizedBox(height: SizeConfig.heightMultiplier * 3.5),
           TextFormField(
-            obscureText: true,
+            obscureText: !_showPassword,
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
             context
                 .read(loginProvider)
-                .password
-                .value = value,
+                .password= value,
             decoration: new InputDecoration(
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showPassword = !_showPassword;
+                  });
+                },
+                child: Icon(
+                  _showPassword ? Icons.visibility : Icons.visibility_off
+                ),
+              ),
               icon: Icon(Icons.lock_outline),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25))
