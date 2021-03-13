@@ -2,6 +2,7 @@ import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/firebase_auth_helper.dart';
+import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,12 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
             )
         ),
         child: Padding(
-          padding: const EdgeInsets.all(29),
+          padding: EdgeInsets.all(SizeConfig.imageSizeMultiplier * 6.5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TopCenterBallLogo(),
-              SizedBox(height: 45),
+              SizedBox(height: SizeConfig.heightMultiplier * 5),
               Material(
                 elevation: 7.0,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -112,7 +113,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
                   hintText: "Email")
           ),
-          SizedBox(height: 25),
+          SizedBox(height: SizeConfig.heightMultiplier * 3.5),
           TextFormField(
             obscureText: true,
             validator: (value) => _validatePassword(value!),
@@ -134,11 +135,11 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           Align(
               alignment: Alignment.centerRight,
               child: ForgotPasswordButton()),
-          SizedBox(height: 40),
+          SizedBox(height: SizeConfig.heightMultiplier * 3.5),
           LoginButtonWidget(_formKey),
-          SizedBox(height: 17),
+          SizedBox(height: 15),
           RegisterTextButton(),
-          SizedBox(height: 30),
+          SizedBox(height: 20),
         ],
       ),
     );

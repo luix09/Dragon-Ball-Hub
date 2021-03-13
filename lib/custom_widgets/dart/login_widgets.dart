@@ -1,5 +1,6 @@
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
 import 'package:dragonballhub/screens/login_screen.dart';
+import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,12 +15,12 @@ class TopCenterBallLogo extends StatelessWidget {
         children: [
           Container(
             child: Image.asset("res/sfera-4.png"),
-            height: 90,
+            height: SizeConfig.imageSizeMultiplier * 22.5,
           ),
           Text(
             "DragonBall Hub",
             style: GoogleFonts.nunito(
-                fontSize: 23,
+                fontSize: SizeConfig.textMultiplier * 4.5,
                 fontWeight: FontWeight.bold,
                 shadows: [
                   Shadow(

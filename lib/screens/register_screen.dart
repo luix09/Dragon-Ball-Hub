@@ -3,6 +3,7 @@ import 'package:dragonballhub/custom_widgets/dart/signup_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/firebase_auth_helper.dart';
+import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -19,43 +20,49 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        padding: EdgeInsets.all(29),
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [Colors.orange, Colors.deepOrange]
-            )
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TopCenterGokuLogo(),
-              SizedBox(height: 25),
-              Material(
-                elevation: 7.0,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 30, horizontal: 20),
-                  child: RegistrationFormWidget(),
-                ),
-              )
-            ],
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [Colors.orange, Colors.deepOrange])),
           ),
-        ),
+          SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.all(29),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TopCenterGokuLogo(),
+                    SizedBox(height: SizeConfig.heightMultiplier * 3.3),
+                    Material(
+                      elevation: 7.0,
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 30, horizontal: 20),
+                        child: RegistrationFormWidget(),
+                      ),
+                    ),
+                    //Expanded(child: Container()),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
 }
-
 
 class RegistrationFormWidget extends StatefulWidget {
   @override
@@ -63,7 +70,6 @@ class RegistrationFormWidget extends StatefulWidget {
 }
 
 class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
-
   final _formKey = GlobalKey<FormState>();
   static const String tooShortEmail = "Email is too short";
   static const String errorMinCharactersPassword =
@@ -99,34 +105,25 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
           TextFormField(
               validator: (value) => _validateEmail(value!),
               onChanged: (value) =>
-              context
-                  .read(registrationProvider)
-                  .email
-                  .value = value,
+                  context.read(registrationProvider).email.value = value,
               decoration: new InputDecoration(
                   icon: Icon(Icons.person),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
                   contentPadding:
-                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                  hintText: "Nome")
-          ),
+                      EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                  hintText: "Nome")),
           SizedBox(height: 25),
           TextFormField(
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
-            context
-                .read(registrationProvider)
-                .password
-                .value = value,
+                context.read(registrationProvider).password.value = value,
             decoration: new InputDecoration(
                 icon: Icon(Icons.person),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
                 contentPadding:
-                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
                 hintText: "Cognome"),
           ),
           SizedBox(height: 25),
@@ -135,17 +132,13 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
           TextFormField(
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
-            context
-                .read(registrationProvider)
-                .password
-                .value = value,
+                context.read(registrationProvider).password.value = value,
             decoration: new InputDecoration(
                 icon: Icon(Icons.email_outlined),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
                 contentPadding:
-                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
                 hintText: "Email"),
           ),
           SizedBox(height: 25),
@@ -153,31 +146,22 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
             obscureText: true,
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
-            context
-                .read(registrationProvider)
-                .password
-                .value = value,
+                context.read(registrationProvider).password.value = value,
             decoration: new InputDecoration(
                 icon: Icon(Icons.lock_outline),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
                 contentPadding:
-                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
                 hintText: "Password"),
           ),
           SizedBox(height: 30),
           SignUpButtonWidget(_formKey),
-
-          ],
+        ],
       ),
     );
   }
 }
-
-
-
-
 
 class DatePickerWidget extends StatefulWidget {
   @override
@@ -211,12 +195,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       ),
       onTap: () {
         _selectDate(context);
-
       },
     );
   }
 
-  Future<void>_selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
     DateTime? newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _selectedDate != null ? _selectedDate! : DateTime(2000),
@@ -237,14 +220,12 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           );
         });
 
-    if(newSelectedDate != null) {
+    if (newSelectedDate != null) {
       DateFormat europeanFormat = DateFormat("dd-MM-yyyy");
       setState(() {
         _selectedDate = newSelectedDate;
-        _textEditingController
-          ..text = europeanFormat.format(_selectedDate!);
+        _textEditingController..text = europeanFormat.format(_selectedDate!);
       });
-
     }
   }
 }

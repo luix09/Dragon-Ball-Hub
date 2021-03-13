@@ -1,48 +1,58 @@
 import 'package:dragonballhub/screens/login_screen.dart';
+import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PreLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          BackgroundWidget(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(child: Container()),
-              Container(
-                height: 125,
-                child: Center(child: Image.asset("res/sfera-4.png")),
+      body: LayoutBuilder(
+        builder: (context, constraints) => Stack(
+          children: [
+            BackgroundWidget(),
+            Container(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(flex:                                         2,child: Container()),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      height: SizeConfig.heightMultiplier * 15,
+                      child: Center(child: Image.asset("res/sfera-4.png")),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      child: Text(
+                        "Welcome to DragonBall Hub",
+                        style: GoogleFonts.nunito(
+                            letterSpacing: 0,
+                            fontSize: SizeConfig.textMultiplier * 3.5,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                  color: Colors.amber,
+                                  blurRadius: 0,
+                                  offset: Offset(1.2, 1))
+                            ]),
+                      ),
+                    ),
+                  ),
+                  Expanded(flex: 2,child: Container()),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: MyBlinkingButton(),
+                    ),
+                ],
               ),
-              SizedBox(height: 15),
-              Container(
-                child: Text(
-                  "Welcome to DragonBall Hub",
-                  style: GoogleFonts.nunito(
-                      letterSpacing: -0.7,
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                      shadows: [
-                        Shadow(
-                            color: Colors.amber,
-                            blurRadius: 4,
-                            offset: Offset(1, 1))
-                      ]),
-                ),
-              ),
-              SizedBox(height: 25),
-              Expanded(child: Container()),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: MyBlinkingButton(),
-              ),
-              SizedBox(height: 35),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -91,7 +101,7 @@ class _MyBlinkingButtonState extends State<MyBlinkingButton>
     return FadeTransition(
       opacity: _animationController,
       child: IconButton(
-          iconSize: 50,
+          iconSize: SizeConfig.heightMultiplier * 8,
           icon: Icon(Icons.arrow_downward,),
           onPressed: () {
             Navigator.of(context).push(_createRoute());
