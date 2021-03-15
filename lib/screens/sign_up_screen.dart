@@ -8,6 +8,7 @@ import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:string_validator/string_validator.dart';
 
 
 final userSignUpModel = Provider<UserDataModel>((ref){
@@ -77,22 +78,44 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
       "Password must be at least 6 characters";
   bool _showPassword = false;
 
-  // TODO: modify validation
-  String? _validateEmail(String email) {
-    if (email.isEmpty) {
+  String? _validateName(String name) {
+    if (name.isEmpty) {
       return 'Cannot be empty';
-    } else if (email.length < 4) {
-      return tooShortEmail;
+    } else if(!isAlpha(name)) {
+      return 'Name must have only letters';
     }
     return null;
   }
 
-  // TODO: modify validation
+  String? _validateSurname(String surname) {
+    if (surname.isEmpty) {
+      return 'Cannot be empty';
+    } else if(!isAlpha(surname)) {
+      return 'Surname must have only letters';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String email) {
+    if (email.isEmpty) {
+      return 'Cannot be empty';
+    } else if (email.length < 8) {
+      return tooShortEmail;
+    } else if(!isEmail(email)) {
+      return "This email doesn't seem to be valid";
+    }
+    return null;
+  }
+
   String? _validatePassword(String password) {
     if (password.isEmpty) {
       return 'Cannot be empty';
     } else if (password.length < 6) {
       return errorMinCharactersPassword;
+    } else if(password == password.toLowerCase()
+        || password == password.toLowerCase()) {
+      print(password);
+      return 'Try to use upper and lower letters';
     }
     return null;
   }
@@ -121,7 +144,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             TextFormField(
-                validator: (value) => null,
+                validator: (value) => _validateName(value!),
                 onChanged: (value) =>
                     context.read(userSignUpModel).nome = value,
                 decoration: new InputDecoration(
@@ -133,7 +156,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
                     hintText: "Nome")),
             SizedBox(height: 25),
             TextFormField(
-              validator: (value) => null,
+              validator: (value) => _validateSurname(value!),
               onChanged: (value) =>
                   context.read(userSignUpModel).cognome = value,
               decoration: new InputDecoration(
@@ -148,7 +171,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
             DatePickerSignUpWidget(),
             SizedBox(height: 25),
             TextFormField(
-              validator: (value) => _validatePassword(value!),
+              validator: (value) => _validateEmail(value!),
               onChanged: (value) =>
                   context.read(userSignUpModel).email = value,
               decoration: new InputDecoration(

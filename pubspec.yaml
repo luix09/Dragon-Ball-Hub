@@ -29,6 +29,7 @@ dependencies:
   source_span: ^1.8.1
   auth_buttons: ^1.0.0
   font_awesome_flutter: ^9.0.0-nullsafety
+  string_validator: ^0.3.0
 
 dev_dependencies:
   #flutter_test:
