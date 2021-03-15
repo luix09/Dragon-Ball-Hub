@@ -1,3 +1,4 @@
+import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
 import 'package:dragonballhub/screens/sign_in_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
@@ -49,7 +50,7 @@ class LoginButtonWidget extends StatelessWidget {
           onPressed: () async {
             if(formKey.currentState!.validate()) {
               final user = context.read(loginProvider);
-              await user.signIn();
+              await user.signInEmail();
 
               if(user.state == AuthResultStatus.successful) {
                 Navigator.pop(context);

@@ -1,35 +1,33 @@
+import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
 import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserSignInData extends StateNotifier<AuthResultStatus?> {
   final AuthHelper auth;
-  String email = "";
-  String password = "";
-  dynamic error;
+  UserDataModel userDataModel = UserDataModel();
 
   UserSignInData({
     required this.auth,
   }) : super(AuthResultStatus.undefined);
 
   void resetData() {
-    email = "";
-    password = "";
+    userDataModel.email = "";
+    userDataModel.password = "";
   }
 
   String generateStateMsg() {
     return AuthExceptionHandler.generateExceptionMessage(state);
   }
 
-  Future<AuthResultStatus?> signIn() async {
+  Future<AuthResultStatus?> signInEmail() async {
     try {
       state = await auth.userSignInEmail(
-          email: this.email, password: this.password);
+          email: this.userDataModel.email,
+          password: this.userDataModel.password);
       return state;
     } catch (e) {
-      error = e;
       rethrow;
     }
   }
@@ -41,44 +39,34 @@ class UserSignInData extends StateNotifier<AuthResultStatus?> {
 
 //--------------------------------------------------------------------------------
 
-class UserSignUpData with ChangeNotifier {
+class UserSignUpData extends StateController<AuthResultStatus?> {
   final AuthHelper auth;
-  String nome = "";
-  String cognome = "";
-  DateTime? birthDate = DateTime(2000);
-  String email = "";
-  String password = "";
-
+  UserDataModel userDataModel = UserDataModel();
 
   UserSignUpData({
     required this.auth,
-  });
+  }) : super(AuthResultStatus.undefined);
 
-
-  Future<void> verifyEmail() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (!user!.emailVerified) {
-      await user.sendEmailVerification();
-    }
+  String generateStateMsg() {
+    return AuthExceptionHandler.generateExceptionMessage(state);
   }
 
-
-  Future<void> signUpEmail() async {
+  Future<AuthResultStatus?> signUpEmail() async {
     try {
-      UserCredential userCredential = await auth.signUpWithEmailAndPassword(
-          email: this.email,
-          password: this.password
-      ).catchError((e) {
-        print(e);
-      });
+      state = await auth.signUpWithEmailAndPassword(
+          email: this.userDataModel.email,
+          password: this.userDataModel.password
+      );
     } on FirebaseAuthException catch (e) {
       print(e);
     } catch (e) {
       print(e);
-    } finally {
-      notifyListeners();
     }
+    return state;
+  }
+
+  Future<void> signOut() async {
+    await auth.signOut();
   }
 
 }

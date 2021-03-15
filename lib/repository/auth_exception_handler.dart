@@ -1,5 +1,8 @@
 enum AuthResultStatus {
   successful,
+  noInternetAccess,
+  emailNotVerified,
+  weakPassword,
   emailAlreadyExists,
   wrongPassword,
   invalidEmail,
@@ -13,10 +16,20 @@ enum AuthResultStatus {
 
 
 class AuthExceptionHandler {
+  //static String connectionError = "[ Unable to resolve host \"www.googleapis.com\":No address associated with hostname ]";
   static handleException(e) {
-    print(e.code);
     var status;
+    if(e.message.contains(RegExp(r'Unable to resolve host \"www.googleapis.com\":No address associated with hostname', caseSensitive: false))) {
+      print("true!");
+      return AuthResultStatus.noInternetAccess;
+    }
     switch (e.code) {
+      case "weak-password":
+        status = AuthResultStatus.weakPassword;
+        break;
+      case "invalid-email":
+        status = AuthResultStatus.noInternetAccess;
+        break;
       case "invalid-email":
         status = AuthResultStatus.invalidEmail;
         break;
@@ -41,6 +54,7 @@ class AuthExceptionHandler {
       default:
         status = AuthResultStatus.undefined;
     }
+    print("Handled status: $status");
     return status;
   }
 
@@ -52,6 +66,9 @@ class AuthExceptionHandler {
     switch (exceptionCode) {
       case AuthResultStatus.invalidEmail:
         errorMessage = "Your email address appears to be malformed.";
+        break;
+      case AuthResultStatus.noInternetAccess:
+        errorMessage = "Oops! Your internet connection must be down.";
         break;
       case AuthResultStatus.wrongPassword:
         errorMessage = "Your password is wrong.";
@@ -72,8 +89,11 @@ class AuthExceptionHandler {
         errorMessage =
         "The email has already been registered. Please login or reset your password.";
         break;
+      case AuthResultStatus.emailNotVerified:
+        errorMessage = "The email is not verified yet! Check your email.";
+        break;
       default:
-        errorMessage = "An undefined Error happened.";
+        errorMessage = "An undefined error happened.";
     }
 
     return errorMessage;

@@ -1,6 +1,7 @@
 import 'package:auth_buttons/res/shared/auth_style.dart';
 import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
+import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
@@ -10,12 +11,11 @@ import 'package:auth_buttons/auth_buttons.dart'
     show GoogleAuthButton, FacebookAuthButton, AuthButtonStyle;
 
 
-final loginProvider = StateNotifierProvider<UserSignInData>((ref) {
-  final authInstance = ref.watch(firebaseAuthProvider);
-  final userSignIn = UserSignInData(auth: AuthHelper(auth: authInstance));
-  return userSignIn;
-});
-
+final userModel = Provider<UserDataModel>((ref) {
+  final signInProvider = ref.watch(loginProvider);
+  return signInProvider.userDataModel;
+}
+);
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -105,7 +105,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               validator: (value) => _validateEmail(value!),
               onChanged: (value) =>
               context
-                  .read(loginProvider)
+                  .read(userModel)
                   .email = value,
               decoration: new InputDecoration(
                   icon: Icon(Icons.email),
@@ -122,7 +122,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             validator: (value) => _validatePassword(value!),
             onChanged: (value) =>
             context
-                .read(loginProvider)
+                .read(userModel)
                 .password= value,
             decoration: new InputDecoration(
               suffixIcon: GestureDetector(

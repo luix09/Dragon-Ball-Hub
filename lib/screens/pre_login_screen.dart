@@ -18,7 +18,7 @@ class PreLoginScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(flex:                                         2,child: Container()),
+                  Expanded(flex: 2, child: Container()),
                   Flexible(
                     flex: 1,
                     child: Container(
@@ -44,11 +44,11 @@ class PreLoginScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(flex: 2,child: Container()),
+                  Expanded(flex: 2, child: Container()),
                   Align(
-                      alignment: Alignment.bottomCenter,
-                      child: MyBlinkingButton(),
-                    ),
+                    alignment: Alignment.bottomCenter,
+                    child: MyBlinkingButton(),
+                  ),
                 ],
               ),
             )
@@ -62,23 +62,20 @@ class PreLoginScreen extends StatelessWidget {
 class BackgroundWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('res/background_prelogin.jpg'),
-                  fit: BoxFit.fill),
-            ),
-          ),
-          Container(
-            color: Color.fromRGBO(165, 165, 165, 0.55),
-          )
-        ]
-    );
+    return Stack(children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('res/background_prelogin.jpg'),
+              fit: BoxFit.fill),
+        ),
+      ),
+      Container(
+        color: Color.fromRGBO(165, 165, 165, 0.55),
+      )
+    ]);
   }
 }
-
 
 class MyBlinkingButton extends StatefulWidget {
   @override
@@ -98,19 +95,26 @@ class _MyBlinkingButtonState extends State<MyBlinkingButton>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _animationController,
       child: IconButton(
           iconSize: SizeConfig.heightMultiplier * 8,
-          icon: Icon(Icons.arrow_downward,),
+          icon: Icon(
+            Icons.arrow_downward,
+          ),
           onPressed: () {
             Navigator.of(context).push(_createRoute());
           }),
     );
   }
 }
-
 
 Route _createRoute() {
   return PageRouteBuilder(
@@ -120,8 +124,7 @@ Route _createRoute() {
       var end = Offset.zero;
       var curve = Curves.ease;
 
-      var tween = Tween(begin: begin, end: end)
-          .chain(CurveTween(curve: curve));
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
       return SlideTransition(
         position: animation.drive(tween),

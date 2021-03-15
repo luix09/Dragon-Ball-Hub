@@ -1,4 +1,5 @@
 import 'package:dragonballhub/providers/top_level_provider.dart';
+import 'package:dragonballhub/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,9 @@ class AuthenticationWidget extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final authStateChanges = watch(authStateChangesProvider);
     return authStateChanges.when(
-      data: (user) => SafeArea(child: _data(context, user)),
+      data: (user){
+        return SafeArea(child: _data(context, user, watch));
+        },
       loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -31,8 +34,12 @@ class AuthenticationWidget extends ConsumerWidget {
     );
   }
 
-  Widget _data(BuildContext context, User? user) {
+  Widget _data(BuildContext context, User? user, ScopedReader watch) {
     if (user != null) {
+      if(!(user.emailVerified)) {
+        final authData = watch(loginProvider);
+        authData.signOut();
+      }
       return signedInBuilder(context);
     }
     return nonSignedInBuilder(context);

@@ -1,6 +1,10 @@
+import 'package:dragonballhub/providers/top_level_provider.dart';
+import 'package:dragonballhub/repository/auth_exception_handler.dart';
+import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TopCenterGokuLogo extends StatelessWidget {
   @override
@@ -30,9 +34,10 @@ class TopCenterGokuLogo extends StatelessWidget {
 }
 
 class SignUpButtonWidget extends StatelessWidget {
-  SignUpButtonWidget(this.formKey);
-
+  SignUpButtonWidget(this.formKey, this.showDialog);
   final GlobalKey<FormState> formKey;
+  final Future<void> Function() showDialog;
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +48,21 @@ class SignUpButtonWidget extends StatelessWidget {
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          onPressed: () async {},
+          onPressed: () async {
+            if(formKey.currentState!.validate()) {
+              final user = context.read(registrationProvider);
+              await user.signUpEmail();
+              print("esecuzione codice qui");
+              if (user.state != AuthResultStatus.successful) {
+                ScaffoldMessenger
+                    .of(context)
+                    .showSnackBar(SnackBar(content: Text('${user.generateStateMsg()}')));
+              } else {
+                showDialog().whenComplete(() => user.signOut());
+
+              }
+            }
+          },
           child: Text(
             "Sign up",
             textAlign: TextAlign.center,

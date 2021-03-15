@@ -1,16 +1,18 @@
 import 'package:dragonballhub/custom_widgets/dart/signup_widgets.dart';
 import 'package:dragonballhub/models/auth_management.dart';
+import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
+import 'package:dragonballhub/repository/auth_exception_handler.dart';
 import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-final registrationProvider = Provider<UserSignUpData>((ref) {
-  final authInstance = ref.watch(firebaseAuthProvider);
-  final userSignUp = UserSignUpData(auth: AuthHelper(auth: authInstance));
-  return userSignUp;
+
+final userSignUpModel = Provider<UserDataModel>((ref){
+  final signUpProvider = ref.watch(registrationProvider);
+  return signUpProvider.userDataModel;
 });
 
 class RegisterScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             vertical: 30, horizontal: 20),
                         child: RegistrationFormWidget(),
                       ),
-                    ),
-                    //Expanded(child: Container()),
+                    ), //Expanded(child: Container()),
                   ],
                 ),
               ),
@@ -73,6 +75,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
   static const String tooShortEmail = "Email is too short";
   static const String errorMinCharactersPassword =
       "Password must be at least 6 characters";
+  bool _showPassword = false;
 
   // TODO: modify validation
   String? _validateEmail(String email) {
@@ -94,70 +97,123 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
     return null;
   }
 
+  Future<void> showSignUpDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialogSignUpWidget();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-              validator: (value) => _validateEmail(value!),
+    return ProviderListener<StateController<AuthResultStatus?>>(
+      provider: registrationProvider,
+      onChange: (context, snapshot) {
+        if(snapshot.state == AuthResultStatus.successful)
+          showSignUpDialog();
+      },
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+                validator: (value) => null,
+                onChanged: (value) =>
+                    context.read(userSignUpModel).nome = value,
+                decoration: new InputDecoration(
+                    icon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    contentPadding:
+                        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                    hintText: "Nome")),
+            SizedBox(height: 25),
+            TextFormField(
+              validator: (value) => null,
               onChanged: (value) =>
-                  context.read(registrationProvider).email= value,
+                  context.read(userSignUpModel).cognome = value,
               decoration: new InputDecoration(
                   icon: Icon(Icons.person),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25))),
                   contentPadding:
-                      EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                  hintText: "Nome")),
-          SizedBox(height: 25),
-          TextFormField(
-            validator: (value) => _validatePassword(value!),
-            onChanged: (value) =>
-                context.read(registrationProvider).password = value,
-            decoration: new InputDecoration(
-                icon: Icon(Icons.person),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25))),
-                contentPadding:
-                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
-                hintText: "Cognome"),
-          ),
-          SizedBox(height: 25),
-          DatePickerSignUpWidget(),
-          SizedBox(height: 25),
-          TextFormField(
-            validator: (value) => _validatePassword(value!),
-            onChanged: (value) =>
-                context.read(registrationProvider).password = value,
-            decoration: new InputDecoration(
-                icon: Icon(Icons.email_outlined),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25))),
-                contentPadding:
-                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
-                hintText: "Email"),
-          ),
-          SizedBox(height: 25),
-          TextFormField(
-            obscureText: true,
-            validator: (value) => _validatePassword(value!),
-            onChanged: (value) =>
-                context.read(registrationProvider).password = value,
-            decoration: new InputDecoration(
-                icon: Icon(Icons.lock_outline),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25))),
-                contentPadding:
-                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
-                hintText: "Password"),
-          ),
-          SizedBox(height: 30),
-          SignUpButtonWidget(_formKey),
-        ],
+                      EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                  hintText: "Cognome"),
+            ),
+            SizedBox(height: 25),
+            DatePickerSignUpWidget(),
+            SizedBox(height: 25),
+            TextFormField(
+              validator: (value) => _validatePassword(value!),
+              onChanged: (value) =>
+                  context.read(userSignUpModel).email = value,
+              decoration: new InputDecoration(
+                  icon: Icon(Icons.email_outlined),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                  contentPadding:
+                      EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                  hintText: "Email"),
+            ),
+            SizedBox(height: 25),
+            TextFormField(
+              obscureText: !_showPassword,
+              validator: (value) => _validatePassword(value!),
+              onChanged: (value) =>
+                  context.read(userSignUpModel).password = value,
+              decoration: InputDecoration(
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                    child: Icon(
+                        _showPassword ? Icons.visibility : Icons.visibility_off
+                    ),
+                  ),
+                  icon: Icon(Icons.lock_outline),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
+                  contentPadding:
+                      EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                  hintText: "Password"),
+            ),
+            SizedBox(height: 30),
+            SignUpButtonWidget(_formKey, showSignUpDialog),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class AlertDialogSignUpWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Account created'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text('Now go to your email.'),
+            Text('Click to the link and verify your account!'),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text('Ok'),
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 }
@@ -179,7 +235,7 @@ class _DatePickerSignUpWidgetState extends State<DatePickerSignUpWidget> {
     _selectedDate = DateTime(2000);
     _textEditingController = new TextEditingController(
         text: DateFormat("dd-MM-yyyy").format(_selectedDate!));
-    context.read(registrationProvider).birthDate = _selectedDate;
+    context.read(userSignUpModel).birthDate = _selectedDate;
   }
 
   @override
@@ -209,9 +265,8 @@ class _DatePickerSignUpWidgetState extends State<DatePickerSignUpWidget> {
           return Theme(
             data: ThemeData.light().copyWith(
               colorScheme: ColorScheme.light(
-                primary: Colors.red,
+                primary: const Color(0xFFFF7D45),
                 onPrimary: Colors.white,
-                surface: Colors.red,
                 onSurface: Colors.black,
               ),
               dialogBackgroundColor: Colors.white,
