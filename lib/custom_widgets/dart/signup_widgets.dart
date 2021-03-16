@@ -35,9 +35,9 @@ class TopCenterGokuLogo extends StatelessWidget {
 
 class SignUpButtonWidget extends StatelessWidget {
   SignUpButtonWidget(this.formKey, this.showDialog);
+
   final GlobalKey<FormState> formKey;
   final Future<void> Function() showDialog;
-
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +49,19 @@ class SignUpButtonWidget extends StatelessWidget {
           minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           onPressed: () async {
-            if(formKey.currentState!.validate()) {
+            if (formKey.currentState!.validate()) {
               final user = context.read(registrationProvider);
               await user.signUpEmail();
-              print("esecuzione codice qui");
+              print("esecuzione codice sign up button");
               if (user.state != AuthResultStatus.successful) {
-                ScaffoldMessenger
-                    .of(context)
-                    .showSnackBar(SnackBar(content: Text('${user.generateStateMsg()}')));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${user.generateStateMsg()}')));
               } else {
-                showDialog().whenComplete(() => user.signOut());
-
+                final cloud = context.read(userCloudProvider);
+                await cloud.addUser()!;
+                await showDialog().whenComplete(() => user.signOut());
+                print("Trying to make dialog to show up...");
+                Navigator.of(context).pop();
               }
             }
           },
@@ -71,4 +73,3 @@ class SignUpButtonWidget extends StatelessWidget {
         ));
   }
 }
-

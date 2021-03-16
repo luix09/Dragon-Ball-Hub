@@ -1,6 +1,6 @@
 import 'package:auth_buttons/res/shared/auth_style.dart';
 import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
-import 'package:dragonballhub/models/auth_management.dart';
+import 'package:dragonballhub/models/auth_manager.dart';
 import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_helper.dart';

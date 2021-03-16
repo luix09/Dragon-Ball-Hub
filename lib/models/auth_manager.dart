@@ -4,6 +4,7 @@ import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+//TODO: generalize these 2 classes in UserAuth ?
 class UserSignInData extends StateNotifier<AuthResultStatus?> {
   final AuthHelper auth;
   UserDataModel userDataModel = UserDataModel();
@@ -12,9 +13,9 @@ class UserSignInData extends StateNotifier<AuthResultStatus?> {
     required this.auth,
   }) : super(AuthResultStatus.undefined);
 
+  //TODO: test this function
   void resetData() {
-    userDataModel.email = "";
-    userDataModel.password = "";
+    userDataModel.resetData();
   }
 
   String generateStateMsg() {
@@ -49,6 +50,11 @@ class UserSignUpData extends StateController<AuthResultStatus?> {
 
   String generateStateMsg() {
     return AuthExceptionHandler.generateExceptionMessage(state);
+  }
+
+  //TODO: test this function
+  void resetData() {
+    userDataModel.resetData();
   }
 
   Future<AuthResultStatus?> signUpEmail() async {

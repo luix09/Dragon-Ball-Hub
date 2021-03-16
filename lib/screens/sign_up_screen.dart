@@ -1,5 +1,5 @@
 import 'package:dragonballhub/custom_widgets/dart/signup_widgets.dart';
-import 'package:dragonballhub/models/auth_management.dart';
+import 'package:dragonballhub/models/auth_manager.dart';
 import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
@@ -10,8 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:string_validator/string_validator.dart';
 
-
-final userSignUpModel = Provider<UserDataModel>((ref){
+final userSignUpModel = Provider<UserDataModel>((ref) {
   final signUpProvider = ref.watch(registrationProvider);
   return signUpProvider.userDataModel;
 });
@@ -22,7 +21,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,15 +71,12 @@ class RegistrationFormWidget extends StatefulWidget {
 
 class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
   final _formKey = GlobalKey<FormState>();
-  static const String tooShortEmail = "Email is too short";
-  static const String errorMinCharactersPassword =
-      "Password must be at least 6 characters";
   bool _showPassword = false;
 
   String? _validateName(String name) {
     if (name.isEmpty) {
       return 'Cannot be empty';
-    } else if(!isAlpha(name)) {
+    } else if (!isAlpha(name)) {
       return 'Name must have only letters';
     }
     return null;
@@ -90,30 +85,34 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
   String? _validateSurname(String surname) {
     if (surname.isEmpty) {
       return 'Cannot be empty';
-    } else if(!isAlpha(surname)) {
+    } else if (!isAlpha(surname)) {
       return 'Surname must have only letters';
     }
     return null;
   }
 
   String? _validateEmail(String email) {
+    const String tooShortEmail = "Email is too short";
     if (email.isEmpty) {
       return 'Cannot be empty';
     } else if (email.length < 8) {
       return tooShortEmail;
-    } else if(!isEmail(email)) {
+    } else if (!isEmail(email)) {
       return "This email doesn't seem to be valid";
     }
     return null;
   }
 
   String? _validatePassword(String password) {
+    const String errorMinCharactersPassword =
+        "Password must be at least 6 characters";
+
     if (password.isEmpty) {
       return 'Cannot be empty';
     } else if (password.length < 6) {
       return errorMinCharactersPassword;
-    } else if(password == password.toLowerCase()
-        || password == password.toLowerCase()) {
+    } else if (password == password.toLowerCase() ||
+        password == password.toLowerCase()) {
       print(password);
       return 'Try to use upper and lower letters';
     }
@@ -135,8 +134,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
     return ProviderListener<StateController<AuthResultStatus?>>(
       provider: registrationProvider,
       onChange: (context, snapshot) {
-        if(snapshot.state == AuthResultStatus.successful)
-          showSignUpDialog();
+        if (snapshot.state == AuthResultStatus.successful) showSignUpDialog();
       },
       child: Form(
         key: _formKey,
@@ -151,8 +149,8 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
                     icon: Icon(Icons.person),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25))),
-                    contentPadding:
-                        EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                    contentPadding: EdgeInsets.only(
+                        left: 15, bottom: 11, top: 11, right: 15),
                     hintText: "Nome")),
             SizedBox(height: 25),
             TextFormField(
@@ -172,8 +170,7 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
             SizedBox(height: 25),
             TextFormField(
               validator: (value) => _validateEmail(value!),
-              onChanged: (value) =>
-                  context.read(userSignUpModel).email = value,
+              onChanged: (value) => context.read(userSignUpModel).email = value,
               decoration: new InputDecoration(
                   icon: Icon(Icons.email_outlined),
                   border: OutlineInputBorder(
@@ -195,9 +192,9 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
                         _showPassword = !_showPassword;
                       });
                     },
-                    child: Icon(
-                        _showPassword ? Icons.visibility : Icons.visibility_off
-                    ),
+                    child: Icon(_showPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
                   ),
                   icon: Icon(Icons.lock_outline),
                   border: OutlineInputBorder(
@@ -233,14 +230,12 @@ class AlertDialogSignUpWidget extends StatelessWidget {
           child: Text('Ok'),
           onPressed: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pop();
           },
         ),
       ],
     );
   }
 }
-
 
 class DatePickerSignUpWidget extends StatefulWidget {
   @override
@@ -273,7 +268,9 @@ class _DatePickerSignUpWidgetState extends State<DatePickerSignUpWidget> {
       ),
       controller: _textEditingController,
       onTap: () {
-        _selectDate(context);
+        _selectDate(context).whenComplete(
+            () => context.read(userSignUpModel).birthDate = _selectedDate);
+        print("Date passed: $_selectedDate");
       },
     );
   }

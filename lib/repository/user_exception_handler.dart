@@ -1,0 +1,4 @@
+enum UserManagerStatus {
+  UserAdded,
+  undefined,
+}
