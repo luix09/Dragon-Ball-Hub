@@ -19,10 +19,22 @@ class FirestoreCloudHelper {
             'surname': surname,
             'birthDate': birthDate,
           });
-          //.then((value) => print("User Added"))
-          //.catchError((error) => print("Failed to add user: $error"));
     } catch (e) {
       print("Exception in addUser: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> deleteUser(String uid) {
+    try {
+      return users
+          .doc(uid)
+          .delete()
+          .then((value) => print("User Deleted"))
+          .catchError((error) => print("Failed to delete user: $error"));
+    } catch (e) {
+      print("Exception in deleteUser: $e");
+      rethrow;
     }
   }
 }

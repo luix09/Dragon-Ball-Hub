@@ -1,9 +1,7 @@
 import 'package:auth_buttons/res/shared/auth_style.dart';
 import 'package:dragonballhub/custom_widgets/dart/login_widgets.dart';
-import 'package:dragonballhub/models/auth_manager.dart';
 import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
-import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +11,7 @@ import 'package:auth_buttons/auth_buttons.dart'
 
 final userModel = Provider<UserDataModel>((ref) {
   final signInProvider = ref.watch(loginProvider);
-  return signInProvider.userDataModel;
+  return signInProvider.userAuth.userDataModel;
 }
 );
 

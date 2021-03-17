@@ -22,7 +22,7 @@ class AuthHelper {
         signInStatus = AuthResultStatus.emailNotVerified;
 
     } on FirebaseException catch (e) {
-      print('Exception IN SIGN IN EMAIL: ${e}');
+      print('Exception IN SIGN IN EMAIL: $e');
       signInStatus = AuthExceptionHandler.handleException(e);
     }
     return signInStatus;
@@ -34,7 +34,7 @@ class AuthHelper {
 
     AuthResultStatus? signUpStatus;
     try {
-      final authResult = await auth.createUserWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
           email: email, password: password)
           .then((state){
             if (!(state.user!.emailVerified)) {
@@ -45,7 +45,7 @@ class AuthHelper {
           });
 
     } on FirebaseAuthException catch (e) {
-      print('Exception IN SIGN UP EMAIL: ${e}');
+      print('Exception IN SIGN UP EMAIL: $e');
       signUpStatus = AuthExceptionHandler.handleException(e);
     }
     return signUpStatus;

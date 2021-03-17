@@ -1,9 +1,7 @@
 import 'package:dragonballhub/custom_widgets/dart/signup_widgets.dart';
-import 'package:dragonballhub/models/auth_manager.dart';
 import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
-import 'package:dragonballhub/repository/auth_exception_handler.dart';
-import 'package:dragonballhub/repository/auth_helper.dart';
+import 'package:dragonballhub/repository/user_exception_handler.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +10,7 @@ import 'package:string_validator/string_validator.dart';
 
 final userSignUpModel = Provider<UserDataModel>((ref) {
   final signUpProvider = ref.watch(registrationProvider);
-  return signUpProvider.userDataModel;
+  return signUpProvider.userAuth.userDataModel;
 });
 
 class RegisterScreen extends StatefulWidget {
@@ -118,12 +116,15 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
     return null;
   }
 
-  Future<void> showSignUpDialog() async {
+  Future<void> showSignUpDialog(DialogFeedback feedback) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return AlertDialogSignUpWidget();
+        return AlertDialogSignUpWidget(
+          title: feedback.title,
+          message: feedback.message,
+        );
       },
     );
   }
@@ -203,21 +204,24 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
 }
 
 class AlertDialogSignUpWidget extends StatelessWidget {
+  final String title;
+  final String message;
+  AlertDialogSignUpWidget({required this.message, required this.title});
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Account created'),
+      title: Text(title),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Now go to your email.'),
-            Text('Click to the link and verify your account!'),
+            Text(message),
           ],
         ),
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Ok'),
+          child: Text('OK'),
           onPressed: () {
             Navigator.of(context).pop();
           },

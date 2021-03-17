@@ -1,6 +1,5 @@
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
-import 'package:dragonballhub/screens/sign_in_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

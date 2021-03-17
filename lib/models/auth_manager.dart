@@ -4,29 +4,56 @@ import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-//TODO: generalize these 2 classes in UserAuth ?
-class UserSignInData extends StateNotifier<AuthResultStatus?> {
-  final AuthHelper auth;
+class UserAuth extends StateNotifier<AuthResultStatus?> {
+  final AuthHelper authHelper;
   UserDataModel userDataModel = UserDataModel();
 
-  UserSignInData({
-    required this.auth,
-  }) : super(AuthResultStatus.undefined);
+  UserAuth({required this.authHelper}) : super(null);
 
-  //TODO: test this function
   void resetData() {
     userDataModel.resetData();
   }
 
-  String generateStateMsg() {
+  String generateStateMsg(state) {
     return AuthExceptionHandler.generateExceptionMessage(state);
+  }
+
+  Future<void> deleteUserAuth() async {
+    try {
+      await authHelper.auth.currentUser!.delete()
+          .catchError((error) => print("Failed to delete user from auth: $error"));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        print(
+            'The user must reauthenticate before this operation can be executed.');
+      }
+    }
+  }
+
+  Future<void> signOut() async {
+    await authHelper.signOut();
+  }
+}
+
+//TODO: generalize these 2 classes in UserAuth ?
+class UserSignInData extends StateNotifier<AuthResultStatus?> {
+  UserAuth userAuth;
+
+  UserSignInData({
+    required this.userAuth,
+  }) : super(AuthResultStatus.undefined);
+
+  String generateStateMsg() {
+    return userAuth.generateStateMsg(state);
   }
 
   Future<AuthResultStatus?> signInEmail() async {
     try {
+      final auth = userAuth.authHelper;
+      final userData = userAuth.userDataModel;
+
       state = await auth.userSignInEmail(
-          email: this.userDataModel.email,
-          password: this.userDataModel.password);
+          email: userData.email, password: userData.password);
       return state;
     } catch (e) {
       rethrow;
@@ -34,35 +61,31 @@ class UserSignInData extends StateNotifier<AuthResultStatus?> {
   }
 
   Future<void> signOut() async {
-    await auth.signOut();
+    await userAuth.signOut();
   }
 }
 
 //--------------------------------------------------------------------------------
 
 class UserSignUpData extends StateNotifier<AuthResultStatus?> {
-  final AuthHelper auth;
-  UserDataModel userDataModel = UserDataModel();
+  UserAuth userAuth;
 
   UserSignUpData({
-    required this.auth,
+    required this.userAuth,
   }) : super(AuthResultStatus.undefined);
 
   String generateStateMsg() {
-    return AuthExceptionHandler.generateExceptionMessage(state);
-  }
-
-  //TODO: test this function
-  void resetData() {
-    userDataModel.resetData();
+    return userAuth.generateStateMsg(state);
   }
 
   Future<AuthResultStatus?> signUpEmail() async {
     try {
+      final auth = userAuth.authHelper;
+      final userData = userAuth.userDataModel;
+
       state = await auth.signUpWithEmailAndPassword(
-          email: this.userDataModel.email,
-          password: this.userDataModel.password
-      );
+          email: userData.email, password: userData.password);
+      return state;
     } on FirebaseAuthException catch (e) {
       print(e);
     } catch (e) {
@@ -72,7 +95,6 @@ class UserSignUpData extends StateNotifier<AuthResultStatus?> {
   }
 
   Future<void> signOut() async {
-    await auth.signOut();
+    await userAuth.signOut();
   }
-
 }

@@ -1,7 +1,6 @@
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
 import 'package:dragonballhub/repository/user_exception_handler.dart';
-import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,7 +37,7 @@ class SignUpButtonWidget extends StatelessWidget {
   SignUpButtonWidget(this.formKey, this.showDialog);
 
   final GlobalKey<FormState> formKey;
-  final Future<void> Function() showDialog;
+  final Future<void> Function(DialogFeedback) showDialog;
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +53,25 @@ class SignUpButtonWidget extends StatelessWidget {
               final user = context.read(registrationProvider);
               await user.signUpEmail();
               print("esecuzione codice sign up button");
+
               if (user.state != AuthResultStatus.successful) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('${user.generateStateMsg()}')));
               } else {
-                final cloud = context.read(userCloudProvider);
-                await cloud.addUser();
-                if(cloud.state == UserManagerStatus.UserAdded) {
-                  await showDialog().whenComplete(() => user.signOut());
+                final userManager = context.read(userCloudProvider);
+                final userManagerStatus = await userManager.addUser()!.catchError((error) => print("error in signup_widget"));
+                final feedback = UserManagerDialogFeedback.generateDialogMessage(userManager.state);
+
+                if(userManagerStatus == UserManagerStatus.UserAdded) {
+                  print("dentro check user stateadded");
+                  await showDialog(feedback).whenComplete(() => user.signOut());
+                  Navigator.of(context).pop();
+                } else {
+                  print("dentro else check user stateadded");
+                  await userManager.deleteUser();
+                  await showDialog(feedback).whenComplete(() => user.signOut());
                 }
-                Navigator.of(context).pop();
+                print("fuori check user stateadded");
               }
             }
           },
