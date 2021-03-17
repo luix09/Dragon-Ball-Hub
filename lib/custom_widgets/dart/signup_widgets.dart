@@ -1,5 +1,6 @@
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
+import 'package:dragonballhub/repository/user_exception_handler.dart';
 import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +59,10 @@ class SignUpButtonWidget extends StatelessWidget {
                     SnackBar(content: Text('${user.generateStateMsg()}')));
               } else {
                 final cloud = context.read(userCloudProvider);
-                await cloud.addUser()!;
-                await showDialog().whenComplete(() => user.signOut());
-                print("Trying to make dialog to show up...");
+                await cloud.addUser();
+                if(cloud.state == UserManagerStatus.UserAdded) {
+                  await showDialog().whenComplete(() => user.signOut());
+                }
                 Navigator.of(context).pop();
               }
             }

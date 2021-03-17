@@ -40,7 +40,7 @@ class UserSignInData extends StateNotifier<AuthResultStatus?> {
 
 //--------------------------------------------------------------------------------
 
-class UserSignUpData extends StateController<AuthResultStatus?> {
+class UserSignUpData extends StateNotifier<AuthResultStatus?> {
   final AuthHelper auth;
   UserDataModel userDataModel = UserDataModel();
 

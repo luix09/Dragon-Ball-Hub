@@ -18,9 +18,9 @@ class FirestoreCloudHelper {
             'name': name,
             'surname': surname,
             'birthDate': birthDate,
-          })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
+          });
+          //.then((value) => print("User Added"))
+          //.catchError((error) => print("Failed to add user: $error"));
     } catch (e) {
       print("Exception in addUser: $e");
     }

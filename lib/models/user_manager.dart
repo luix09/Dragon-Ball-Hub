@@ -9,10 +9,11 @@ class UserManager extends StateNotifier<UserManagerStatus> {
   UserDataModel? userDataModel;
   UserManager({this.firestoreHelper, this.userDataModel}) : super(UserManagerStatus.undefined);
 
-  Future<void>? addUser() {
+  Future<UserManagerStatus>? addUser() {
     try {
       final uid = firestoreHelper!.auth.currentUser!.uid;
       firestoreHelper!.addUser(userDataModel!.nome, userDataModel!.cognome, userDataModel!.birthDate, uid);
+      state = UserManagerStatus.UserAdded;
     } catch(e) {
       print("Exception in addUser: $e");
     }

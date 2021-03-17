@@ -113,7 +113,6 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
       return errorMinCharactersPassword;
     } else if (password == password.toLowerCase() ||
         password == password.toLowerCase()) {
-      print(password);
       return 'Try to use upper and lower letters';
     }
     return null;
@@ -131,82 +130,73 @@ class _RegistrationFormWidgetState extends State<RegistrationFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderListener<StateController<AuthResultStatus?>>(
-      provider: registrationProvider,
-      onChange: (context, snapshot) {
-        if (snapshot.state == AuthResultStatus.successful) showSignUpDialog();
-      },
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-                validator: (value) => _validateName(value!),
-                onChanged: (value) =>
-                    context.read(userSignUpModel).nome = value,
-                decoration: new InputDecoration(
-                    icon: Icon(Icons.person),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25))),
-                    contentPadding: EdgeInsets.only(
-                        left: 15, bottom: 11, top: 11, right: 15),
-                    hintText: "Nome")),
-            SizedBox(height: 25),
-            TextFormField(
-              validator: (value) => _validateSurname(value!),
-              onChanged: (value) =>
-                  context.read(userSignUpModel).cognome = value,
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+              validator: (value) => _validateName(value!),
+              onChanged: (value) => context.read(userSignUpModel).nome = value,
               decoration: new InputDecoration(
                   icon: Icon(Icons.person),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(25))),
                   contentPadding:
-                      EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
-                  hintText: "Cognome"),
-            ),
-            SizedBox(height: 25),
-            DatePickerSignUpWidget(),
-            SizedBox(height: 25),
-            TextFormField(
-              validator: (value) => _validateEmail(value!),
-              onChanged: (value) => context.read(userSignUpModel).email = value,
-              decoration: new InputDecoration(
-                  icon: Icon(Icons.email_outlined),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
-                  contentPadding:
-                      EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
-                  hintText: "Email"),
-            ),
-            SizedBox(height: 25),
-            TextFormField(
-              obscureText: !_showPassword,
-              validator: (value) => _validatePassword(value!),
-              onChanged: (value) =>
-                  context.read(userSignUpModel).password = value,
-              decoration: InputDecoration(
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _showPassword = !_showPassword;
-                      });
-                    },
-                    child: Icon(_showPassword
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                  ),
-                  icon: Icon(Icons.lock_outline),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25))),
-                  contentPadding:
-                      EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
-                  hintText: "Password"),
-            ),
-            SizedBox(height: 30),
-            SignUpButtonWidget(_formKey, showSignUpDialog),
-          ],
-        ),
+                      EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                  hintText: "Nome")),
+          SizedBox(height: 25),
+          TextFormField(
+            validator: (value) => _validateSurname(value!),
+            onChanged: (value) => context.read(userSignUpModel).cognome = value,
+            decoration: new InputDecoration(
+                icon: Icon(Icons.person),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
+                contentPadding:
+                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                hintText: "Cognome"),
+          ),
+          SizedBox(height: 25),
+          DatePickerSignUpWidget(),
+          SizedBox(height: 25),
+          TextFormField(
+            validator: (value) => _validateEmail(value!),
+            onChanged: (value) => context.read(userSignUpModel).email = value,
+            decoration: new InputDecoration(
+                icon: Icon(Icons.email_outlined),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
+                contentPadding:
+                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                hintText: "Email"),
+          ),
+          SizedBox(height: 25),
+          TextFormField(
+            obscureText: !_showPassword,
+            validator: (value) => _validatePassword(value!),
+            onChanged: (value) =>
+                context.read(userSignUpModel).password = value,
+            decoration: InputDecoration(
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showPassword = !_showPassword;
+                    });
+                  },
+                  child: Icon(
+                      _showPassword ? Icons.visibility : Icons.visibility_off),
+                ),
+                icon: Icon(Icons.lock_outline),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
+                contentPadding:
+                    EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                hintText: "Password"),
+          ),
+          SizedBox(height: 30),
+          SignUpButtonWidget(_formKey, showSignUpDialog),
+        ],
       ),
     );
   }
