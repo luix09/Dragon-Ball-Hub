@@ -1,40 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dragonballhub/repository/auth_helper.dart';
+import 'package:dragonballhub/repository/user_exception_handler.dart';
 
 class FirestoreCloudHelper {
   static const String userCollections = 'users';
   CollectionReference users =
       FirebaseFirestore.instance.collection(userCollections);
-  final FirebaseAuth auth;
+  final AuthHelper authHelper;
 
-  FirestoreCloudHelper(this.auth);
+  FirestoreCloudHelper(this.authHelper);
 
-  Future<void>? addUser(
-      String name, String surname, DateTime? birthDate, String uid) {
+  Future<UserManagerStatus>? addUser(
+      {required String name,
+      required String surname,
+      required DateTime? birthDate, String? uid}) async {
+
+    UserManagerStatus userStatus = UserManagerStatus.undefined;
     try {
-      return users
-          .doc(uid)
-          .set({
-            'name': name,
-            'surname': surname,
-            'birthDate': birthDate,
-          });
+      await users.doc(uid != null ? uid : null).set({
+        'name': name,
+        'surname': surname,
+        'birthDate': birthDate,
+      }).whenComplete(() => userStatus = UserManagerStatus.UserAdded);
+
     } catch (e) {
       print("Exception in addUser: $e");
-      rethrow;
+      userStatus = UserManagerFeedback.handleException(e);
     }
+    return userStatus;
   }
 
-  Future<void> deleteUser(String uid) {
+  Future<UserManagerStatus> deleteUser(String uid) async {
+    UserManagerStatus userStatus = UserManagerStatus.undefined;
     try {
-      return users
+      users
           .doc(uid)
           .delete()
-          .then((value) => print("User Deleted"))
-          .catchError((error) => print("Failed to delete user: $error"));
+          .whenComplete(() => userStatus = UserManagerStatus.UserDeleted);
+          //.catchError((error) => print("Failed to delete user: $error"));
     } catch (e) {
       print("Exception in deleteUser: $e");
-      rethrow;
+      userStatus = UserManagerFeedback.handleException(e);
     }
+    return userStatus;
   }
 }

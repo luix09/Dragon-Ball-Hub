@@ -211,7 +211,14 @@ class AlertDialogSignUpWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
+      title: ListTile(
+        leading: Image.asset("res/sfera-4.png", height: SizeConfig.imageSizeMultiplier * 10,),
+        contentPadding: EdgeInsets.zero,
+        title: Text(title, style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: SizeConfig.textMultiplier * 3
+        ),),
+      ),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
@@ -219,6 +226,7 @@ class AlertDialogSignUpWidget extends StatelessWidget {
           ],
         ),
       ),
+      elevation: 5,
       actions: <Widget>[
         TextButton(
           child: Text('OK'),

@@ -1,6 +1,7 @@
 import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/repository/firestore_cloud_helper.dart';
 import 'package:dragonballhub/repository/user_exception_handler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'auth_manager.dart';
@@ -18,26 +19,27 @@ class UserManager extends StateNotifier<UserManagerStatus> {
 
   Future<UserManagerStatus>? addUser() async {
     try {
-      final uid = firestoreHelper.auth.currentUser!.uid;
-      firestoreHelper.addUser(userDataModel.nome, userDataModel.cognome,
-          userDataModel.birthDate, uid)!
+      await firestoreHelper
+          .addUser(
+              name: userDataModel.nome,
+              surname: userDataModel.cognome,
+              birthDate: userDataModel.birthDate)!
           .whenComplete(() => state = UserManagerStatus.UserAdded)
           .catchError((error) => state = UserManagerStatus.undefined);
     } catch (e) {
-      print("Exception in addUser USERMANAGER: $e");
+      rethrow;
     }
     return state;
   }
 
-  Future<UserManagerStatus> deleteUser() async {
+  Future<UserManagerStatus> deleteUserFromFirestore() async {
     try {
-      final uid = firestoreHelper.auth.currentUser!.uid;
+      final uid = userAuth.authHelper.auth.currentUser!.uid;
       await firestoreHelper.deleteUser(uid);
-      await userAuth.deleteUserAuth()
-          .catchError((error) => print("Failed to delete user from auth: $error"));
-      state = UserManagerStatus.UserAdded;
+      state = UserManagerStatus.UserDeleted;
     } catch (e) {
-      print("Exception in deleteUser: $e");
+      print("Exception in deleteUser UserManager: $e");
+      state = UserManagerStatus.undefined;
     }
     return state;
   }

@@ -29,12 +29,11 @@ final userAuthProvider = StateNotifierProvider<UserAuth>((ref) {
 
 // It provides access to Firestore Cloud
 final userCloudProvider = StateNotifierProvider<UserManager>((ref) {
-  final authInstance = ref.watch(firebaseAuthProvider);
   final userDataProvider = ref.watch(userSignUpModel);
   final userAuth = ref.watch(userAuthProvider);
 
   final cloud = UserManager(
-      firestoreHelper: FirestoreCloudHelper(authInstance),
+      firestoreHelper: FirestoreCloudHelper(userAuth.authHelper),
       userAuth: userAuth,
       userDataModel: userDataProvider);
 

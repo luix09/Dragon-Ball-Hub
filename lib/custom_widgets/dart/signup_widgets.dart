@@ -50,31 +50,31 @@ class SignUpButtonWidget extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           onPressed: () async {
             if (formKey.currentState!.validate()) {
-              final user = context.read(registrationProvider);
-              await user.signUpEmail();
-              print("esecuzione codice sign up button");
+              final userAuth = context.read(registrationProvider);
+              final userManager = context.read(userCloudProvider);
+              final authStatus = await userAuth.signUpEmail();
+              //print("authstatuschange BEFORE: ${authStatusChange.data!.value}");
 
-              if (user.state != AuthResultStatus.successful) {
+              if(authStatus != AuthResultStatus.successful) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${user.generateStateMsg()}')));
+                    SnackBar(content: Text('${userAuth.generateStateMsg()}')));
               } else {
-                final userManager = context.read(userCloudProvider);
-                final userManagerStatus = await userManager.addUser()!.catchError((error) => print("error in signup_widget"));
-                final feedback = UserManagerDialogFeedback.generateDialogMessage(userManager.state);
+                //print("authstatuschange AFTER SUCCESS: ${authStatusChange.data!.value}");
 
-                if(userManagerStatus == UserManagerStatus.UserAdded) {
-                  print("dentro check user stateadded");
-                  await showDialog(feedback).whenComplete(() => user.signOut());
-                  Navigator.of(context).pop();
-                } else {
-                  print("dentro else check user stateadded");
-                  await userManager.deleteUser();
-                  await showDialog(feedback).whenComplete(() => user.signOut());
-                }
-                print("fuori check user stateadded");
-              }
+                await userManager.addUser()!.then((value) async {
+                  DialogFeedback feedback = UserManagerFeedback.generateDialogMessage(value);
+
+                  if (value != UserManagerStatus.UserAdded) {
+                    await showDialog(feedback);
+                    await userManager.deleteUserFromFirestore();
+                  } else {
+                    feedback = UserManagerFeedback.generateDialogMessage(value);
+                    await showDialog(feedback).whenComplete(() => userAuth.signOut());
+                    Navigator.pop(context);
+                  }
+              });
             }
-          },
+          }},
           child: Text(
             "Sign up",
             textAlign: TextAlign.center,

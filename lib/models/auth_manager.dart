@@ -18,9 +18,10 @@ class UserAuth extends StateNotifier<AuthResultStatus?> {
     return AuthExceptionHandler.generateExceptionMessage(state);
   }
 
-  Future<void> deleteUserAuth() async {
+  Future<void> deleteUserAuth(User currentUser) async {
     try {
-      await authHelper.auth.currentUser!.delete()
+      print("Sono dentro deleteUserAuth");
+      await currentUser.delete()
           .catchError((error) => print("Failed to delete user from auth: $error"));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
