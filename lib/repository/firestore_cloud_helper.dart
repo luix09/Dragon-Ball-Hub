@@ -13,11 +13,12 @@ class FirestoreCloudHelper {
   Future<UserManagerStatus>? addUser(
       {required String name,
       required String surname,
-      required DateTime? birthDate, String? uid}) async {
+      required DateTime? birthDate}) async {
 
     UserManagerStatus userStatus = UserManagerStatus.undefined;
     try {
-      await users.doc(uid != null ? uid : null).set({
+      final uid = authHelper.auth.currentUser!.uid;
+      await users.doc(uid).set({
         'name': name,
         'surname': surname,
         'birthDate': birthDate,
