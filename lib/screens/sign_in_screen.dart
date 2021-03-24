@@ -156,7 +156,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GoogleAuthButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final googleProvider = context.read(loginProvider);
+                  await googleProvider.signInWithGoogle();
+                },
                 darkMode: false,
                 style: AuthButtonStyle.icon,
                 iconSize: SizeConfig.imageSizeMultiplier * 6,

@@ -1,5 +1,5 @@
-import 'package:dragonballhub/repository/firestore_cloud_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'auth_exception_handler.dart';
 
@@ -27,6 +27,27 @@ class AuthHelper {
       signInStatus = AuthExceptionHandler.handleException(e);
     }
     return signInStatus;
+  }
+
+  Future<AuthResultStatus?> signInWithGoogle() async {
+    AuthResultStatus? signInStatusWithGoogle;
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication googleAuth = await googleUser!
+          .authentication;
+
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await auth.signInWithCredential(credential);
+      signInStatusWithGoogle = AuthResultStatus.successful;
+    } catch (e) {
+      print('Exception IN SIGN IN GOOGLE: $e');
+      signInStatusWithGoogle = AuthExceptionHandler.handleException(e);
+    }
+    return signInStatusWithGoogle;
   }
 
   Future<AuthResultStatus?> signUpWithEmailAndPassword(

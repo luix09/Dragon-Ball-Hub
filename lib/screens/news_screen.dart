@@ -1,4 +1,3 @@
-import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,8 +20,7 @@ class _NewsContainerState extends State<NewsContainer> {
         return ListTile(
           title: Consumer(
             builder: (context, watch, child){
-              final listTexts = watch(listProvider!(fakeSize));
-              return Text('${listTexts[index]}');
+              return Container();
             },
           )
         );

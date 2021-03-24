@@ -48,6 +48,15 @@ class UserSignInData extends StateNotifier<AuthResultStatus?> {
     return userAuth.generateStateMsg(state);
   }
 
+  Future<AuthResultStatus?> signInWithGoogle() async {
+    try {
+      state = await userAuth.authHelper.signInWithGoogle();
+    } catch (e) {
+      rethrow;
+    }
+    return state;
+  }
+
   Future<AuthResultStatus?> signInEmail() async {
     try {
       final auth = userAuth.authHelper;
