@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dragonballhub/authentication_widget.dart';
 import 'package:dragonballhub/screens/forgot_password.dart';
-import 'package:dragonballhub/screens/home_screen.dart';
-import 'package:dragonballhub/screens/no_internet_screen.dart';
+import 'package:dragonballhub/screens/news_screen.dart';
 import 'package:dragonballhub/screens/pre_login_screen.dart';
 import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:dragonballhub/screens/settings_screen.dart';
@@ -45,7 +43,7 @@ class _MyAppState extends State<MyApp> {
                 routes: {
                   '/start': (context) => AuthenticationWidget(
                         nonSignedInBuilder: (context) => PreLoginScreen(),
-                        signedInBuilder: (context) => HomeScreen(),
+                        signedInBuilder: (context) => NewsContainer(),
                       ),
                   '/settings': (context) => SettingsScreen(),
                   "/register": (context) => RegisterScreen(),
