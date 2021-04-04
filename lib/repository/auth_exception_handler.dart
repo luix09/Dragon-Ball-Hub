@@ -28,9 +28,6 @@ class AuthExceptionHandler {
         status = AuthResultStatus.weakPassword;
         break;
       case "invalid-email":
-        status = AuthResultStatus.noInternetAccess;
-        break;
-      case "invalid-email":
         status = AuthResultStatus.invalidEmail;
         break;
       case "wrong-password":

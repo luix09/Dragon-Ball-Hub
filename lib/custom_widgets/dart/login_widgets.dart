@@ -1,5 +1,7 @@
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/repository/auth_exception_handler.dart';
+import 'package:dragonballhub/screens/forgot_password.dart';
+import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +87,7 @@ class RegisterTextButton extends StatelessWidget {
           style: linkStyle,
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              Navigator.pushNamed(context, "/register");
+              Navigator.pushNamed(context, RegisterScreen.id);
             }),
     );
   }
@@ -106,7 +108,7 @@ class ForgotPasswordButton extends StatelessWidget {
           style: linkStyle,
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              Navigator.pushNamed(context, "/forgot_password");
+              Navigator.pushNamed(context, ForgotPassword.id);
             }),
     );
   }

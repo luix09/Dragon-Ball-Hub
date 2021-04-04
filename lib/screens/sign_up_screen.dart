@@ -14,6 +14,7 @@ final userSignUpModel = Provider<UserDataModel>((ref) {
 });
 
 class RegisterScreen extends StatefulWidget {
+  static const String id = "/register_screen";
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }

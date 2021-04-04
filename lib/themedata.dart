@@ -8,6 +8,7 @@ ThemeData buildTheme() {
       primaryColor: const Color(0xFFFF7D45),
       primaryColorDark: Colors.orangeAccent,
       hintColor: Colors.grey,
+      backgroundColor: Colors.white,
       iconTheme: IconThemeData(
         color: Colors.black
       )

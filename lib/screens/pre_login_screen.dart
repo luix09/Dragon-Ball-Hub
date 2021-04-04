@@ -23,7 +23,7 @@ class PreLoginScreen extends StatelessWidget {
                     flex: 1,
                     child: Container(
                       height: SizeConfig.heightMultiplier * 15,
-                      child: Center(child: Image.asset("res/sfera-4.png")),
+                      child: Center(child: Image.asset("res/sfera_4.png")),
                     ),
                   ),
                   Flexible(
@@ -66,7 +66,7 @@ class BackgroundWidget extends StatelessWidget {
       Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('res/background_prelogin.jpg'),
+              image: AssetImage('res/background_prelogin-min.jpg'),
               fit: BoxFit.fill),
         ),
       ),

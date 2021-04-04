@@ -1,16 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dragonballhub/custom_widgets/dbh_drawer.dart';
+import 'package:dragonballhub/custom_widgets/news_widgets.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class NewsContainer extends StatefulWidget {
+class NewsScreen extends StatefulWidget {
+  static const String id = "/news_screen";
   @override
-  _NewsContainerState createState() => _NewsContainerState();
+  _NewsScreenState createState() => _NewsScreenState();
 }
 
-class _NewsContainerState extends State<NewsContainer> {
+class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +29,17 @@ class _NewsContainerState extends State<NewsContainer> {
           shrinkWrap: true,
           slivers: [
             SliverAppBar(
-              title: Image.asset(
-                "res/sfera-4.png",
-                height: 50,
+              toolbarHeight: SizeConfig.heightMultiplier * 8,
+              //collapsedHeight: SizeConfig.heightMultiplier * 8,
+              title: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Image.asset(
+                  "res/logo-dragonballz.png",
+                  height: SizeConfig.heightMultiplier * 10,
+                ),
               ),
               actions: [
-                IconButton(icon: Icon(Icons.person), onPressed: () {}),
+                ProfilePictureAvatar(),
               ],
               centerTitle: true,
               floating: false,
@@ -65,30 +72,36 @@ class _NewsDashboardState extends State<NewsDashboard> {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Material(
-        elevation: 15.0,
+        elevation: 25.0,
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.symmetric(
               vertical: 20, horizontal: 20),
           child: Column(
             children: [
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                title: Text(
-                  "Recent News",
-                  style: GoogleFonts.nunito(
-                      letterSpacing: 0,
-                      fontSize: SizeConfig.textMultiplier * 3.2,
-                      fontWeight: FontWeight.w100,
-                  ),
-                ),
-                trailing: IconButton(
-                  icon: Icon(Icons.search, color: Colors.black,),
-                  onPressed: (){
-                  },
+              WelcomeBackWidget(height: SizeConfig.heightMultiplier * 17),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Recent News",
+                      style: GoogleFonts.nunito(
+                        letterSpacing: 0,
+                        fontSize: SizeConfig.textMultiplier * 3.2,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                    Expanded(child: Container()),
+                    IconButton(
+                      icon: Icon(Icons.search, color: Colors.black, size: SizeConfig.imageSizeMultiplier * 4,),
+                      onPressed: (){
+                      },
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 15),
               CarouselSlider(
                 options: CarouselOptions(
                   height: SizeConfig.heightMultiplier * 30,
@@ -115,7 +128,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                 height: SizeConfig.heightMultiplier * 50,
                                 //margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderRadius: BorderRadius.circular(8.0),
                                   /*boxShadow: [
                                     BoxShadow(
                                         color: Colors.black54,
@@ -194,15 +207,34 @@ class _NewsDashboardState extends State<NewsDashboard> {
               Divider(
                 thickness: 1.4,
               ),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: Row(
+                  children: [
+                    Text(
+                      "All News",
+                      style: GoogleFonts.nunito(
+                        letterSpacing: 0,
+                        fontSize: SizeConfig.textMultiplier * 3.2,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(height: 10),
               DefaultTabController(
-                length: 4,
+                length: 5,
                 child: SizedBox(
                   height: SizeConfig.heightMultiplier * 100,
                   child: Column(
                     children: <Widget>[
                       TabBar(
-                        labelColor: Colors.black,
+                        labelColor: Colors.deepOrange,
+                        isScrollable: true,
+                        indicatorColor: Colors.deepOrangeAccent,
+                        unselectedLabelColor: Colors.black.withOpacity(0.3),
                         labelStyle: GoogleFonts.nunito(
                           letterSpacing: 0,
                           fontSize: SizeConfig.textMultiplier * 2,
@@ -210,16 +242,19 @@ class _NewsDashboardState extends State<NewsDashboard> {
                         ),
                         tabs: <Widget>[
                           Tab(
-                            text: "Manga",
+                            text: "Dragon Ball Super",
                           ),
                           Tab(
-                            text: "Anime",
+                            text: "Dragon Ball Z",
+                          ),
+                          Tab(
+                            text: "Dragon Ball",
                           ),
                           Tab(
                             text: "Videogames",
                           ),
                           Tab(
-                            text: "Brand",
+                            text: "Extra",
                           )
                         ],
                       ),
@@ -227,8 +262,20 @@ class _NewsDashboardState extends State<NewsDashboard> {
                         child: TabBarView(
                           children: <Widget>[
                             Container(
-                              color: Colors.green,
-                              height: 500,
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 20,),
+                                  NewsBox(),
+                                  SizedBox(height: 20,),
+                                  NewsBox(),
+                                  SizedBox(height: 20,),
+                                  NewsBox(),
+                                  SizedBox(height: 20,),
+                                  NewsBox(),
+                                  SizedBox(height: 20,),
+                                ],
+                              ),
                             ),
                             Container(
                               color: Colors.yellow,
@@ -238,6 +285,9 @@ class _NewsDashboardState extends State<NewsDashboard> {
                             ),
                             Container(
                               color: Colors.orangeAccent,
+                            ),
+                            Container(
+                              color: Colors.yellow,
                             ),
                           ],
                         ),
