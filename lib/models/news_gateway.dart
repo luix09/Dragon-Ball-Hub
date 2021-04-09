@@ -48,15 +48,9 @@ class MangaNewsError extends NewsState {
 }
 
 class NewsGateway extends StateNotifier<NewsState> {
-  late ApiNews api;
-  late List<NewsModel> mangaNews;
-  late List<NewsModel> dbsNews;
-  late List<NewsModel> dbzNews;
-  late List<NewsModel> videogamesNews;
+  final ApiNews api;
 
-  NewsGateway({required this.api}) : super(NewsInitialState()) {
-    
-  }
+  NewsGateway({required this.api}) : super(NewsInitialState());
 
   List<NewsModel> parseNews(String responseBody) {
     Map<String, dynamic> parsed = json.decode(responseBody);
@@ -71,7 +65,7 @@ class NewsGateway extends StateNotifier<NewsState> {
     try {
       state = NewsLoading();
       final response = await api.fetchMangaNews();
-      this.mangaNews = parseNews(response.body);
+      var mangaNews = parseNews(response.body);
       state = MangaNewsFetched(mangaNews: mangaNews);
     } catch (e) {
       state = MangaNewsError(errorMsg: e.toString());

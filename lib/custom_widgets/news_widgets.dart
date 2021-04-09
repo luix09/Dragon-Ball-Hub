@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dragonballhub/models/news_gateway.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -163,3 +165,145 @@ class ProfilePictureAvatar extends StatelessWidget {
     );
   }
 }
+
+class RecentNewsSlider extends StatefulWidget {
+  @override
+  _RecentNewsSliderState createState() => _RecentNewsSliderState();
+}
+
+class _RecentNewsSliderState extends State<RecentNewsSlider> {
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: SizeConfig.heightMultiplier * 30,
+        aspectRatio: 16/9,
+        viewportFraction: 0.8,
+        initialPage: 0,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 7),
+        autoPlayAnimationDuration: Duration(milliseconds: 1700),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeCenterPage: true,
+        //onPageChanged: (value, ) {},
+        scrollDirection: Axis.horizontal,
+      ),
+      items: [1,2,3,4,5].map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Stack(
+              children: <Widget>[
+                Center(
+                  child: Container(
+                    height: SizeConfig.heightMultiplier * 50,
+                    //margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      /*boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black54,
+                                        offset: Offset(0.0, 4.0),
+                                        blurRadius: 15.0,
+                                        spreadRadius: -1),
+                                  ],*/
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            child: Image(
+                              image: AssetImage("res/background2.jpg"),
+                              height: SizeConfig.imageSizeMultiplier * 100,
+                              width: SizeConfig.imageSizeMultiplier * 100,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        ),
+                        Wrap(
+                          children: <Widget>[
+                            Container(
+                              height: SizeConfig.heightMultiplier * 10,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Stack(
+                                children: <Widget>[
+                                  Positioned(
+                                    top: 15,
+                                    left: 20,
+                                    child: Text(
+                                      "Happy Birthday!",
+                                      style: TextStyle(
+                                          fontSize: SizeConfig.textMultiplier * 2,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.deepOrange),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 15,
+                                    left: 20,
+                                    child: Text(
+                                      "Dragon Ball Super is now 3 years old today.\nIt has been 3 years since its last episode.",
+                                      style: TextStyle(
+                                          color: Colors.white54,
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: SizeConfig.textMultiplier * 1.3),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      }).toList(),
+    );
+  }
+}
+
+class NewsListView extends StatefulWidget {
+  final MangaNewsFetched state;
+  NewsListView({required this.state});
+  @override
+  _NewsListViewState createState() => _NewsListViewState();
+}
+
+class _NewsListViewState extends State<NewsListView> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        itemCount: widget.state.mangaNews.length,
+        itemBuilder: (context, index) {
+          return NewsBox(
+            title: widget.state.mangaNews[index]
+                .title,
+            description: widget.state.mangaNews[index]
+                .description,
+            image: widget.state.mangaNews[index].img,
+            date: widget.state.mangaNews[index].date,
+          );
+        }
+    );;
+  }
+}
+
+

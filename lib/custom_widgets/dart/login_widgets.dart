@@ -16,7 +16,7 @@ class TopCenterBallLogo extends StatelessWidget {
           child: Column(
         children: [
           Container(
-            child: Image.asset("res/sfera-4.png"),
+            child: Image.asset("res/sfera_4.png"),
             height: SizeConfig.imageSizeMultiplier * 22.5,
           ),
           Text(

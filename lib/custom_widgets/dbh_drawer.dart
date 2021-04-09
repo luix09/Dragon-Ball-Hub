@@ -47,7 +47,6 @@ class DbhDrawer extends StatelessWidget {
     return Drawer(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 15),
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
         height: SizeConfig.screenHeight,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
