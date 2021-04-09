@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dragonballhub/models/news_gateway.dart';
+import 'package:dragonballhub/states/news_states.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,10 +47,10 @@ class WelcomeBackWidget extends StatelessWidget {
 
 class NewsBox extends StatelessWidget {
 
-  String image;
-  String title;
-  String description;
-  String date;
+  final String image;
+  final String title;
+  final String description;
+  final String date;
 
   NewsBox({
     required this.title,
@@ -279,7 +279,7 @@ class _RecentNewsSliderState extends State<RecentNewsSlider> {
 }
 
 class NewsListView extends StatefulWidget {
-  final MangaNewsFetched state;
+  final NewsState state;
   NewsListView({required this.state});
   @override
   _NewsListViewState createState() => _NewsListViewState();
@@ -288,21 +288,22 @@ class NewsListView extends StatefulWidget {
 class _NewsListViewState extends State<NewsListView> {
   @override
   Widget build(BuildContext context) {
+    print(widget.state.newsList);
     return ListView.builder(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
-        itemCount: widget.state.mangaNews.length,
+        itemCount: widget.state.newsList!.length,
         itemBuilder: (context, index) {
           return NewsBox(
-            title: widget.state.mangaNews[index]
+            title: widget.state.newsList![index]
                 .title,
-            description: widget.state.mangaNews[index]
+            description: widget.state.newsList![index]
                 .description,
-            image: widget.state.mangaNews[index].img,
-            date: widget.state.mangaNews[index].date,
+            image: widget.state.newsList![index].img,
+            date: widget.state.newsList![index].date,
           );
         }
-    );;
+    );
   }
 }
 

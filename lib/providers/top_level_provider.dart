@@ -1,4 +1,3 @@
-import 'package:dragonballhub/custom_widgets/dbh_drawer.dart';
 import 'package:dragonballhub/models/auth_manager.dart';
 import 'package:dragonballhub/models/news_gateway.dart';
 import 'package:dragonballhub/models/user_manager.dart';

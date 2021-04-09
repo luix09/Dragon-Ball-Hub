@@ -1,9 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dragonballhub/custom_widgets/dbh_drawer.dart';
 import 'package:dragonballhub/custom_widgets/news_widgets.dart';
-import 'package:dragonballhub/models/news_gateway.dart';
-import 'package:dragonballhub/models/news_model.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
+import 'package:dragonballhub/states/db_states.dart';
+import 'package:dragonballhub/states/dbsuper_states.dart';
+import 'package:dragonballhub/states/dbz_states.dart';
+import 'package:dragonballhub/states/manga_states.dart';
+import 'package:dragonballhub/states/news_states.dart';
+import 'package:dragonballhub/states/videogames_states.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +41,8 @@ class _NewsScreenState extends State<NewsScreen> {
               title: Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Image.asset(
-                  "res/logo-dragonballz.png",
-                  height: SizeConfig.heightMultiplier * 10,
+                  "res/sfera_4.png",
+                  height: SizeConfig.heightMultiplier * 8.5,
                 ),
               ),
               actions: [ProfilePictureAvatar()],
@@ -130,7 +133,6 @@ class _NewsDashboardState extends State<NewsDashboard> {
                 SizedBox(height: 10),
                 Consumer(
                     builder: (context, watch, child) {
-                      //final allNewsProvider = watch(newsGatewayProvider.state);
                       return DefaultTabController(
                         length: 5,
                         child: SizedBox(
@@ -140,6 +142,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                               TabBar(
                                 labelColor: Colors.deepOrange,
                                 isScrollable: true,
+                                physics: BouncingScrollPhysics(),
                                 indicatorColor: Colors.deepOrangeAccent,
                                 unselectedLabelColor: Colors.black.withOpacity(
                                     0.3),
@@ -149,6 +152,9 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                   fontWeight: FontWeight.w500,
                                 ),
                                 tabs: <Widget>[
+                                  Tab(
+                                    text: "Manga",
+                                  ),
                                   Tab(
                                     text: "Dragon Ball Super",
                                   ),
@@ -160,9 +166,6 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                   ),
                                   Tab(
                                     text: "Videogames",
-                                  ),
-                                  Tab(
-                                    text: "Extra",
                                   )
                                 ],
                               ),
@@ -202,7 +205,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                         padding: EdgeInsets.all(5),
                                         child: FutureBuilder(
                                           future: watch(newsGatewayProvider)
-                                              .getMangaNews(),
+                                              .getDbSuperNews(),
                                           builder: (context, AsyncSnapshot<
                                               NewsState> snapshot) {
                                             if (!snapshot.hasData) {
@@ -214,15 +217,15 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                                   'Something went wrong :('));
                                             }
                                             if (snapshot
-                                                .data is MangaNewsError) {
+                                                .data is DbSuperNewsError) {
                                               return Center(child: Text(
                                                   "No news available."));
                                             }
                                             else {
-                                              final mangaNewsState = snapshot
-                                                  .data as MangaNewsFetched;
+                                              final dbSuperNewsState = snapshot
+                                                  .data as DbSuperNewsFetched;
                                               return NewsListView(
-                                                  state: mangaNewsState);
+                                                  state: dbSuperNewsState);
                                             }
                                           },
                                         )
@@ -231,7 +234,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                         padding: EdgeInsets.all(5),
                                         child: FutureBuilder(
                                           future: watch(newsGatewayProvider)
-                                              .getMangaNews(),
+                                              .getDbzNews(),
                                           builder: (context, AsyncSnapshot<
                                               NewsState> snapshot) {
                                             if (!snapshot.hasData) {
@@ -243,15 +246,15 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                                   'Something went wrong :('));
                                             }
                                             if (snapshot
-                                                .data is MangaNewsError) {
+                                                .data is DbzNewsError) {
                                               return Center(child: Text(
                                                   "No news available."));
                                             }
                                             else {
-                                              final mangaNewsState = snapshot
-                                                  .data as MangaNewsFetched;
+                                              final dbzNewsState = snapshot
+                                                  .data as DbzNewsFetched;
                                               return NewsListView(
-                                                  state: mangaNewsState);
+                                                  state: dbzNewsState);
                                             }
                                           },
                                         )
@@ -260,7 +263,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                         padding: EdgeInsets.all(5),
                                         child: FutureBuilder(
                                           future: watch(newsGatewayProvider)
-                                              .getMangaNews(),
+                                              .getDbNews(),
                                           builder: (context, AsyncSnapshot<
                                               NewsState> snapshot) {
                                             if (!snapshot.hasData) {
@@ -272,15 +275,15 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                                   'Something went wrong :('));
                                             }
                                             if (snapshot
-                                                .data is MangaNewsError) {
+                                                .data is DbNewsError) {
                                               return Center(child: Text(
                                                   "No news available."));
                                             }
                                             else {
-                                              final mangaNewsState = snapshot
-                                                  .data as MangaNewsFetched;
+                                              final dbNewsState = snapshot
+                                                  .data as DbNewsFetched;
                                               return NewsListView(
-                                                  state: mangaNewsState);
+                                                  state: dbNewsState);
                                             }
                                           },
                                         )
@@ -289,7 +292,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                         padding: EdgeInsets.all(5),
                                         child: FutureBuilder(
                                           future: watch(newsGatewayProvider)
-                                              .getMangaNews(),
+                                              .getVideogamesNews(),
                                           builder: (context, AsyncSnapshot<
                                               NewsState> snapshot) {
                                             if (!snapshot.hasData) {
@@ -301,15 +304,15 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                                   'Something went wrong :('));
                                             }
                                             if (snapshot
-                                                .data is MangaNewsError) {
+                                                .data is VideogamesNewsError) {
                                               return Center(child: Text(
                                                   "No news available."));
                                             }
                                             else {
-                                              final mangaNewsState = snapshot
-                                                  .data as MangaNewsFetched;
+                                              final videogamesNewsState = snapshot
+                                                  .data as VideogamesNewsFetched;
                                               return NewsListView(
-                                                  state: mangaNewsState);
+                                                  state: videogamesNewsState);
                                             }
                                           },
                                         )

@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     precacheImage(AssetImage("res/sfera_4.png"), context);
-    precacheImage(AssetImage("res/background_prelogin.png"), context);
+    precacheImage(AssetImage("res/background_prelogin-min.jpg"), context);
     precacheImage(AssetImage("res/logo-dragonballz.png"), context);
     precacheImage(AssetImage("res/goku-greeting.png"), context);
     return LayoutBuilder(
