@@ -39,6 +39,7 @@ class AuthenticationWidget extends ConsumerWidget {
         final authData = watch(loginProvider);
         authData.signOut();
       }
+
       return signedInBuilder(context);
     }
     return nonSignedInBuilder(context);

@@ -1,6 +1,9 @@
+import 'package:dragonballhub/custom_widgets/dbh_drawer.dart';
 import 'package:dragonballhub/models/auth_manager.dart';
+import 'package:dragonballhub/models/news_gateway.dart';
 import 'package:dragonballhub/models/user_manager.dart';
 import 'package:dragonballhub/repository/auth_helper.dart';
+import 'package:dragonballhub/repository/api_news.dart';
 import 'package:dragonballhub/repository/firestore_cloud_helper.dart';
 import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,6 +39,7 @@ final userCloudProvider = StateNotifierProvider<UserManager>((ref) {
   return cloud;
 });
 
+
 final loginProvider = StateNotifierProvider<UserSignInData>((ref) {
   final userAuth = ref.watch(userAuthProvider);
 
@@ -43,9 +47,20 @@ final loginProvider = StateNotifierProvider<UserSignInData>((ref) {
   return userSignIn;
 });
 
+
 final registrationProvider = StateNotifierProvider<UserSignUpData>((ref) {
   final userAuth = ref.watch(userAuthProvider);
 
   final userSignUp = UserSignUpData(userAuth: userAuth);
   return userSignUp;
+});
+
+
+final newsProvider = FutureProvider<ApiNews>((ref) async {
+  return ApiNews();
+});
+
+final newsGatewayProvider = StateNotifierProvider<NewsGateway>((ref) {
+  final apiProvider = ref.watch(newsProvider);
+  return NewsGateway(api: apiProvider.data!.value);
 });

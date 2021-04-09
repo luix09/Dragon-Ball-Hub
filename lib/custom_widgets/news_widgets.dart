@@ -44,11 +44,25 @@ class WelcomeBackWidget extends StatelessWidget {
 }
 
 class NewsBox extends StatelessWidget {
+
+  String image;
+  String title;
+  String description;
+  String date;
+
+  NewsBox({
+    required this.title,
+    required this.image,
+    required this.description,
+    required this.date,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: SizeConfig.heightMultiplier * 18,
-      width: SizeConfig.widthMultiplier * 80,
+      height: SizeConfig.heightMultiplier * 20,
+      width: SizeConfig.widthMultiplier * 85,
+      margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
           borderRadius: BorderRadius.circular(8),
@@ -71,35 +85,41 @@ class NewsBox extends StatelessWidget {
                           topLeft: Radius.circular(8),
                           bottomLeft: Radius.circular(8)),
                       clipBehavior: Clip.antiAlias,
-                      child: Image.asset("res/background_prelogin.jpg",
+                      child: Image.network(image,
                           fit: BoxFit.cover))),
             ),
           ),
           Flexible(
-            flex: 4,
+            flex: 5,
             child: Stack(
               children: <Widget>[
-                Positioned(
-                  top: SizeConfig.heightMultiplier * 1.1,
-                  left: SizeConfig.widthMultiplier * 1.8,
-                  child: Text(
-                    "Big news for DB",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: SizeConfig.textMultiplier * 2.2,
-                        fontWeight: FontWeight.w500),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                    child: Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: SizeConfig.textMultiplier * 2,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding:
-                        EdgeInsets.only(left: SizeConfig.widthMultiplier * 1.8),
+                        EdgeInsets.only(left: SizeConfig.widthMultiplier * 1.8, top: 10),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel euismod ante, bibendum blandit ipsum.",
+                      description,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: SizeConfig.textMultiplier * 1.7,
+                          fontSize: SizeConfig.textMultiplier * 1.6,
                           fontWeight: FontWeight.w300),
                     ),
                   ),
@@ -108,7 +128,7 @@ class NewsBox extends StatelessWidget {
                   bottom: SizeConfig.heightMultiplier * 1,
                   right: SizeConfig.widthMultiplier * 1.8,
                   child: Text(
-                    "01 Jan 1970",
+                    date,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: SizeConfig.textMultiplier * 1.2,
