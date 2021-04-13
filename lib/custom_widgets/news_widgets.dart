@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
+import 'package:dragonballhub/screens/webview_news_screen.dart';
 import 'package:dragonballhub/states/news_states.dart';
 import 'package:dragonballhub/states/recent_news.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
@@ -51,98 +52,108 @@ class WelcomeBackWidget extends StatelessWidget {
 class NewsBox extends StatelessWidget {
   final String image;
   final String title;
+  final String urlPage;
   final String description;
   final String date;
 
   NewsBox({
     required this.title,
     required this.image,
+    required this.urlPage,
     required this.description,
     required this.date,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: SizeConfig.heightMultiplier * 20,
-      width: SizeConfig.widthMultiplier * 85,
-      margin: EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black12,
-                spreadRadius: 0,
-                blurRadius: 4,
-                offset: Offset(2, 5))
-          ]),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 3,
-            child: AspectRatio(
-              aspectRatio: SizeConfig.aspectRatio! * 1.2,
-              child: Container(
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8)),
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.network(image, fit: BoxFit.cover))),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DisplayNewsScreen(urlPage: urlPage))
+        );
+      },
+      child: Container(
+        height: SizeConfig.heightMultiplier * 20,
+        width: SizeConfig.widthMultiplier * 85,
+        margin: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                  offset: Offset(2, 5))
+            ]),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: AspectRatio(
+                aspectRatio: SizeConfig.aspectRatio! * 1.2,
+                child: Container(
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft: Radius.circular(8)),
+                        clipBehavior: Clip.antiAlias,
+                        child: Image.network(image, fit: BoxFit.cover))),
+              ),
             ),
-          ),
-          Flexible(
-            flex: 5,
-            child: Stack(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 5.0),
-                    child: Text(
-                      title,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: SizeConfig.textMultiplier * 2,
-                          fontWeight: FontWeight.w500),
+            Flexible(
+              flex: 5,
+              child: Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 5.0),
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: SizeConfig.textMultiplier * 2,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: SizeConfig.widthMultiplier * 1.8, top: 20),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: SizeConfig.widthMultiplier * 1.8, top: 20),
+                      child: Text(
+                        description,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: SizeConfig.textMultiplier * 1.6,
+                            fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: SizeConfig.heightMultiplier * 1,
+                    right: SizeConfig.widthMultiplier * 1.8,
                     child: Text(
-                      description,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
+                      date,
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: SizeConfig.textMultiplier * 1.6,
+                          fontSize: SizeConfig.textMultiplier * 1.2,
                           fontWeight: FontWeight.w300),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: SizeConfig.heightMultiplier * 1,
-                  right: SizeConfig.widthMultiplier * 1.8,
-                  child: Text(
-                    date,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: SizeConfig.textMultiplier * 1.2,
-                        fontWeight: FontWeight.w300),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -201,104 +212,114 @@ class _RecentNewsSliderState extends State<RecentNewsSlider> {
                 items: state.newsList!.map((i) {
                   return Builder(
                     builder: (BuildContext context) {
-                      return Stack(
-                        children: <Widget>[
-                          Center(
-                            child: Container(
-                              height: SizeConfig.heightMultiplier * 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                        ),
-                                        child: Image.network(
-                                          state
-                                              .newsList![
-                                                  state.newsList!.indexOf(i)]
-                                              .img,
-                                          fit: BoxFit.fill,
-                                          height: SizeConfig.screenHeight * 100,
-                                          width: SizeConfig.screenWidth * 100,
-                                        )),
-                                  ),
-                                  Wrap(
-                                    children: <Widget>[
-                                      Container(
-                                        height:
-                                            SizeConfig.heightMultiplier * 10,
-                                        decoration: BoxDecoration(
-                                          color: Colors.black,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DisplayNewsScreen(
+                                      urlPage: state.newsList![state.newsList!.indexOf(i)].url
+                                  )));
+                        },
+                        child: Stack(
+                          children: <Widget>[
+                            Center(
+                              child: Container(
+                                height: SizeConfig.heightMultiplier * 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: ClipRRect(
                                           borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                          ),
+                                          child: Image.network(
+                                            state
+                                                .newsList![
+                                                    state.newsList!.indexOf(i)]
+                                                .img,
+                                            fit: BoxFit.fill,
+                                            height: SizeConfig.screenHeight * 100,
+                                            width: SizeConfig.screenWidth * 100,
+                                          )),
+                                    ),
+                                    Wrap(
+                                      children: <Widget>[
+                                        Container(
+                                          height:
+                                              SizeConfig.heightMultiplier * 10,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                            ),
+                                          ),
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Positioned(
+                                                top: 10,
+                                                left: 10,
+                                                right: 10,
+                                                child: Container(
+                                                  height: 30,
+                                                  child: Text(
+                                                    state
+                                                        .newsList![state.newsList!
+                                                            .indexOf(i)]
+                                                        .title,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            2,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.deepOrange),
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                bottom: 5,
+                                                left: 10,
+                                                right: 10,
+                                                child: Container(
+                                                  height: 30,
+                                                  child: Text(
+                                                    state
+                                                        .newsList![state.newsList!
+                                                            .indexOf(i)]
+                                                        .description,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: Colors.white54,
+                                                        fontStyle:
+                                                            FontStyle.italic,
+                                                        fontSize: SizeConfig
+                                                                .textMultiplier *
+                                                            1.27),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
-                                        child: Stack(
-                                          children: <Widget>[
-                                            Positioned(
-                                              top: 10,
-                                              left: 10,
-                                              right: 10,
-                                              child: Container(
-                                                height: 30,
-                                                child: Text(
-                                                  state
-                                                      .newsList![state.newsList!
-                                                          .indexOf(i)]
-                                                      .title,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontSize: SizeConfig
-                                                              .textMultiplier *
-                                                          2,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.deepOrange),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 5,
-                                              left: 10,
-                                              right: 10,
-                                              child: Container(
-                                                height: 30,
-                                                child: Text(
-                                                  state
-                                                      .newsList![state.newsList!
-                                                          .indexOf(i)]
-                                                      .description,
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: Colors.white54,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                      fontSize: SizeConfig
-                                                              .textMultiplier *
-                                                          1.27),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       );
                     },
                   );
@@ -341,6 +362,7 @@ class _NewsListViewState extends State<NewsListView> {
           return NewsBox(
             title: widget.state.newsList![index].title,
             description: widget.state.newsList![index].description,
+            urlPage: widget.state.newsList![index].url,
             image: widget.state.newsList![index].img,
             date: widget.state.newsList![index].date,
           );
