@@ -35,19 +35,21 @@ dependencies:
   carousel_slider: ^4.0.0-nullsafety.0
   flutter_launcher_icons: ^0.9.0
   http: ^0.13.1
-  device_preview: ^0.7.1
+  cloud_firestore_web: ^1.0.4
+
 
 dev_dependencies:
+  test: ^1.16.8
   flutter_native_splash: ^1.1.5+1
   flutter_launcher_icons: ^0.9.0
 
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "res/sfera_4.png"
+  image_path: "res/goku-greeting.png"
 
-  #flutter_test:
-  #  sdk: flutter
+flutter_test:
+  sdk: flutter
 
 flutter_native_splash:
   color: "#D97642"

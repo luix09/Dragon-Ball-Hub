@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dragonballhub/models/news_model.dart';
 import 'package:dragonballhub/repository/api_news.dart';
 import 'package:dragonballhub/states/db_states.dart';
@@ -7,6 +6,7 @@ import 'package:dragonballhub/states/dbsuper_states.dart';
 import 'package:dragonballhub/states/dbz_states.dart';
 import 'package:dragonballhub/states/manga_states.dart';
 import 'package:dragonballhub/states/news_states.dart';
+import 'package:dragonballhub/states/recent_news.dart';
 import 'package:dragonballhub/states/videogames_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,6 +23,19 @@ class NewsGateway extends StateNotifier<NewsState> {
       listNews.add(NewsModel.fromJson(parsed[key][i]));
     }
     return listNews;
+  }
+
+  Future<NewsState> getRecentNews() async {
+    try {
+      state = NewsLoading();
+      final response = await api.fetchRecentNews();
+      var recentNews = parseNews(response.body, "recent_news");
+      state = RecentNewsFetched(recentNews);
+    } catch (e) {
+      state = RecentNewsError(errorMsg: e.toString());
+      print("getRecentNews() error: " + e.toString());
+    }
+    return state;
   }
 
   Future<NewsState> getMangaNews() async {

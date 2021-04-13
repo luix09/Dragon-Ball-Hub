@@ -18,6 +18,12 @@ class ApiNews {
   }
 
   // ENDPOINTS
+
+  Future<http.Response> fetchRecentNews() async {
+    var url = Uri.http('10.0.2.2:8080', '/test/rest_api/get_recent_news.php');
+    return fetchNews(url);
+  }
+
   Future<http.Response> fetchMangaNews() async {
     var url = Uri.http('10.0.2.2:8080', '/test/rest_api/get_manga_news.php');
     return fetchNews(url);

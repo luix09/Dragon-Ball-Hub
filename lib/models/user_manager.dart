@@ -2,7 +2,6 @@ import 'package:dragonballhub/models/user_data_model.dart';
 import 'package:dragonballhub/repository/firestore_cloud_helper.dart';
 import 'package:dragonballhub/repository/user_exception_handler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'auth_manager.dart';
 
 class UserManager extends StateNotifier<UserManagerStatus> {
