@@ -1,29 +1,39 @@
 import 'package:dragonballhub/models/news_model.dart';
-import 'news_states.dart';
 
-class DbzNewsFetched extends NewsState {
-  DbzNewsFetched(List<NewsModel> newsList) : super(newsList: newsList);
+abstract class DbZState {}
+
+class InitialDbZState extends DbZState {
+  InitialDbZState();
+}
+
+class LoadingDbZState extends DbZState {
+  LoadingDbZState();
+}
+
+class DbZNewsFetched extends DbZState {
+  final List<NewsModel>? newsList;
+  DbZNewsFetched({required this.newsList});
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is DbzNewsFetched && o.newsList == newsList;
+    return o is DbZNewsFetched && o.newsList == newsList;
   }
 
   @override
   int get hashCode => newsList.hashCode;
 }
 
-class DbzNewsError extends NewsState {
+class DbZNewsError extends DbZState {
   String errorMsg;
-  DbzNewsError({required this.errorMsg}) : super(newsList: null);
+  DbZNewsError({required this.errorMsg});
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is DbzNewsError && o.errorMsg == errorMsg;
+    return o is DbZNewsError && o.errorMsg == errorMsg;
   }
 
   @override

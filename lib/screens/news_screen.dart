@@ -1,5 +1,7 @@
 import 'package:dragonballhub/custom_widgets/dbh_drawer.dart';
 import 'package:dragonballhub/custom_widgets/news_widgets.dart';
+import 'package:dragonballhub/models/news_state_notifiers/manganews_state_notifier.dart';
+import 'package:dragonballhub/providers/all_news_providers.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/states/db_states.dart';
 import 'package:dragonballhub/states/dbsuper_states.dart';
@@ -13,16 +15,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class NewsScreen extends StatefulWidget {
-  static const String id = "/news_screen";
+
+class NewsScreen extends ConsumerWidget {
+  static const id = "/news_screen";
+  late NewsState mangaStateNews;
+
+  void loadNewsStates(ScopedReader watch) {
+    final recentProvider = watch(recentNewsProvider);
+    final mangaNewsProvider = watch(mangaProvider);
+    final dbSuperNewsProvider = watch(dbSuperProvider);
+    final dbZNewsProvider = watch(dbZProvider);
+    final dbNewsProvider = watch(dbProvider);
+    final videogamesNewsProvider = watch(videogamesProvider);
+    recentProvider.getRecentNews();
+    mangaNewsProvider.getMangaNews();
+    dbSuperNewsProvider.getDbSuperNews();
+    dbZNewsProvider.getDbZNews();
+    dbNewsProvider.getDbNews();
+    videogamesNewsProvider.getVideogamesNews();
+  }
 
   @override
-  _NewsScreenState createState() => _NewsScreenState();
-}
+  Widget build(BuildContext context, ScopedReader watch) {
+    this.loadNewsStates(watch);
 
-class _NewsScreenState extends State<NewsScreen> {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       drawer: DbhDrawer(),
       body: Container(
@@ -33,32 +49,45 @@ class _NewsScreenState extends State<NewsScreen> {
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
                 colors: [Colors.orange, Colors.deepOrange])),
-        child: CustomScrollView(
-          shrinkWrap: false,
-          slivers: [
-            SliverAppBar(
-              toolbarHeight: SizeConfig.heightMultiplier * 8,
-              title: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Image.asset(
-                  "res/sfera_4.png",
-                  height: SizeConfig.heightMultiplier * 8.5,
+        child: RefreshIndicator(
+          onRefresh: () {
+            return Future.delayed(
+              Duration(seconds: 1), () {
+                  this.loadNewsStates(watch);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text('Page Refreshed'),
+                    ),
+                  );
+              });
+          },
+          child: CustomScrollView(
+            shrinkWrap: false,
+            slivers: [
+              SliverAppBar(
+                toolbarHeight: SizeConfig.heightMultiplier * 8,
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Image.asset(
+                    "res/sfera_4.png",
+                    height: SizeConfig.heightMultiplier * 8.5,
+                  ),
                 ),
+                actions: [ProfilePictureAvatar()],
+                centerTitle: true,
+                floating: false,
+                backgroundColor: Colors.transparent,
+                iconTheme: IconThemeData(color: Colors.black),
               ),
-              actions: [ProfilePictureAvatar()],
-              centerTitle: true,
-              floating: false,
-              backgroundColor: Colors.transparent,
-              iconTheme: IconThemeData(color: Colors.black),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                  [
-                    NewsDashboard(),
-                  ]
-              ),
-            )
-          ],
+              SliverList(
+                delegate: SliverChildListDelegate(
+                    [
+                      NewsDashboard(),
+                    ]
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -153,7 +182,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                 ),
                                 tabs: <Widget>[
                                   Tab(
-                                    text: "Manga",
+                                    text: "Manga Super",
                                   ),
                                   Tab(
                                     text: "Dragon Ball Super",
@@ -174,145 +203,115 @@ class _NewsDashboardState extends State<NewsDashboard> {
                                   children: <Widget>[
                                     Container(
                                         padding: EdgeInsets.all(5),
-                                        child: FutureBuilder(
-                                          future: watch(newsGatewayProvider)
-                                              .getMangaNews(),
-                                          builder: (context, AsyncSnapshot<
-                                              NewsState> snapshot) {
-                                            if (!snapshot.hasData) {
+                                        child: Consumer(
+                                          builder: (context, watch, child) {
+                                            final mangaNewsState = watch(mangaProvider.state);
+                                            if (mangaNewsState is LoadingMangaState) {
                                               return Center(
                                                   child: CircularProgressIndicator());
                                             }
-                                            if (snapshot.hasError) {
+                                            if (mangaNewsState is MangaNewsError) {
                                               return Center(child: Text(
                                                   'Something went wrong :('));
                                             }
-                                            if (snapshot
-                                                .data is MangaNewsError) {
-                                              return Center(child: Text(
-                                                  "No news available."));
-                                            }
-                                            else {
-                                              final mangaNewsState = snapshot
-                                                  .data as MangaNewsFetched;
-                                              return NewsListView(
-                                                  state: mangaNewsState);
+                                            else if (mangaNewsState is MangaNewsFetched){
+                                              return mangaNewsState.newsList != null ?
+                                                NewsListView<MangaNewsFetched>(state: mangaNewsState) :
+                                                Center(child: Text("No news available."));
+                                            } else {
+                                              return Center(child: Text("Mistake!"));
                                             }
                                           },
                                         )
                                     ),
                                     Container(
                                         padding: EdgeInsets.all(5),
-                                        child: FutureBuilder(
-                                          future: watch(newsGatewayProvider)
-                                              .getDbSuperNews(),
-                                          builder: (context, AsyncSnapshot<
-                                              NewsState> snapshot) {
-                                            if (!snapshot.hasData) {
+                                        child: Consumer(
+                                          builder: (context, watch, child) {
+                                            final dbSuperNewsState = watch(dbSuperProvider.state);
+                                            if (dbSuperNewsState is LoadingDbSuperState) {
                                               return Center(
                                                   child: CircularProgressIndicator());
                                             }
-                                            if (snapshot.hasError) {
+                                            if (dbSuperNewsState is DbSuperNewsError) {
                                               return Center(child: Text(
                                                   'Something went wrong :('));
                                             }
-                                            if (snapshot
-                                                .data is DbSuperNewsError) {
-                                              return Center(child: Text(
-                                                  "No news available."));
-                                            }
-                                            else {
-                                              final dbSuperNewsState = snapshot
-                                                  .data as DbSuperNewsFetched;
-                                              return NewsListView(
-                                                  state: dbSuperNewsState);
+                                            else if (dbSuperNewsState is DbSuperNewsFetched){
+                                              return dbSuperNewsState.newsList != null ?
+                                              NewsListView<DbSuperNewsFetched>( state: dbSuperNewsState) :
+                                              Center(child: Text("No news available."));
+                                            } else {
+                                              return Center(child: Text("Mistake!"));
                                             }
                                           },
                                         )
                                     ),
                                     Container(
                                         padding: EdgeInsets.all(5),
-                                        child: FutureBuilder(
-                                          future: watch(newsGatewayProvider)
-                                              .getDbzNews(),
-                                          builder: (context, AsyncSnapshot<
-                                              NewsState> snapshot) {
-                                            if (!snapshot.hasData) {
+                                        child: Consumer(
+                                          builder: (context, watch, child) {
+                                            final dbzNewsState = watch(dbZProvider.state);
+                                            if (dbzNewsState is LoadingDbZState) {
                                               return Center(
                                                   child: CircularProgressIndicator());
                                             }
-                                            if (snapshot.hasError) {
+                                            if (dbzNewsState is DbZNewsError) {
                                               return Center(child: Text(
                                                   'Something went wrong :('));
                                             }
-                                            if (snapshot
-                                                .data is DbzNewsError) {
-                                              return Center(child: Text(
-                                                  "No news available."));
-                                            }
-                                            else {
-                                              final dbzNewsState = snapshot
-                                                  .data as DbzNewsFetched;
-                                              return NewsListView(
-                                                  state: dbzNewsState);
+                                            else if (dbzNewsState is DbZNewsFetched){
+                                              return dbzNewsState.newsList != null ?
+                                              NewsListView<DbZNewsFetched>(state: dbzNewsState) :
+                                              Center(child: Text("No news available."));
+                                            } else {
+                                              return Center(child: Text("Mistake!"));
                                             }
                                           },
                                         )
                                     ),
                                     Container(
                                         padding: EdgeInsets.all(5),
-                                        child: FutureBuilder(
-                                          future: watch(newsGatewayProvider)
-                                              .getDbNews(),
-                                          builder: (context, AsyncSnapshot<
-                                              NewsState> snapshot) {
-                                            if (!snapshot.hasData) {
+                                        child: Consumer(
+                                          builder: (context, watch, child) {
+                                            final dbNewsState = watch(dbProvider.state);
+                                            if (dbNewsState is LoadingDbState) {
                                               return Center(
                                                   child: CircularProgressIndicator());
                                             }
-                                            if (snapshot.hasError) {
+                                            if (dbNewsState is DbNewsError) {
                                               return Center(child: Text(
                                                   'Something went wrong :('));
                                             }
-                                            if (snapshot
-                                                .data is DbNewsError) {
-                                              return Center(child: Text(
-                                                  "No news available."));
-                                            }
-                                            else {
-                                              final dbNewsState = snapshot
-                                                  .data as DbNewsFetched;
-                                              return NewsListView(
-                                                  state: dbNewsState);
+                                            else if (dbNewsState is DbNewsFetched){
+                                              return dbNewsState.newsList != null ?
+                                              NewsListView<DbNewsFetched>(state: dbNewsState) :
+                                              Center(child: Text("No news available."));
+                                            } else {
+                                              return Center(child: Text("Mistake!"));
                                             }
                                           },
                                         )
                                     ),
                                     Container(
                                         padding: EdgeInsets.all(5),
-                                        child: FutureBuilder(
-                                          future: watch(newsGatewayProvider)
-                                              .getVideogamesNews(),
-                                          builder: (context, AsyncSnapshot<
-                                              NewsState> snapshot) {
-                                            if (!snapshot.hasData) {
+                                        child: Consumer(
+                                          builder: (context, watch, child) {
+                                            final videogamesNewsState = watch(videogamesProvider.state);
+                                            if (videogamesNewsState is LoadingVideogamesState) {
                                               return Center(
                                                   child: CircularProgressIndicator());
                                             }
-                                            if (snapshot.hasError) {
+                                            if (videogamesNewsState is VideogamesNewsError) {
                                               return Center(child: Text(
                                                   'Something went wrong :('));
                                             }
-                                            if (snapshot
-                                                .data is VideogamesNewsError) {
-                                              return Center(child: Text(
-                                                  "No news available."));
-                                            }
-                                            else {
-                                              final videogamesNewsState = snapshot
-                                                  .data as VideogamesNewsFetched;
-                                              return NewsListView(
-                                                  state: videogamesNewsState);
+                                            else if (videogamesNewsState is VideogamesNewsFetched){
+                                              return videogamesNewsState.newsList != null ?
+                                              NewsListView<VideogamesNewsFetched>( state: videogamesNewsState) :
+                                              Center(child: Text("No news available."));
+                                            } else {
+                                              return Center(child: Text("Mistake!"));
                                             }
                                           },
                                         )

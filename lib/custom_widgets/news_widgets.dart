@@ -1,4 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dragonballhub/models/news_model.dart';
+import 'package:dragonballhub/providers/all_news_providers.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/screens/webview_news_screen.dart';
 import 'package:dragonballhub/states/news_states.dart';
@@ -188,12 +190,10 @@ class _RecentNewsSliderState extends State<RecentNewsSlider> {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (context, watch, child) => FutureBuilder(
-          future: watch(newsGatewayProvider).getRecentNews(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final state = snapshot.data as RecentNewsFetched;
-              return CarouselSlider(
+      builder: (context, watch, child) {
+        final state = watch(recentNewsProvider.state);
+        if(state is RecentNewsFetched) {
+        return CarouselSlider(
                 options: CarouselOptions(
                   height: SizeConfig.heightMultiplier * 30,
                   aspectRatio: 16 / 9,
@@ -202,7 +202,7 @@ class _RecentNewsSliderState extends State<RecentNewsSlider> {
                   enableInfiniteScroll: true,
                   reverse: false,
                   autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 7),
+                  autoPlayInterval: Duration(seconds: 5),
                   autoPlayAnimationDuration: Duration(milliseconds: 1700),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enlargeCenterPage: true,
@@ -221,128 +221,147 @@ class _RecentNewsSliderState extends State<RecentNewsSlider> {
                                       urlPage: state.newsList![state.newsList!.indexOf(i)].url
                                   )));
                         },
-                        child: Stack(
-                          children: <Widget>[
-                            Center(
-                              child: Container(
-                                height: SizeConfig.heightMultiplier * 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: Column(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                          ),
-                                          child: Image.network(
-                                            state
-                                                .newsList![
-                                                    state.newsList!.indexOf(i)]
-                                                .img,
-                                            fit: BoxFit.fill,
-                                            height: SizeConfig.screenHeight * 100,
-                                            width: SizeConfig.screenWidth * 100,
-                                          )),
-                                    ),
-                                    Wrap(
-                                      children: <Widget>[
-                                        Container(
-                                          height:
-                                              SizeConfig.heightMultiplier * 10,
-                                          decoration: BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                            ),
-                                          ),
-                                          child: Stack(
-                                            children: <Widget>[
-                                              Positioned(
-                                                top: 10,
-                                                left: 10,
-                                                right: 10,
-                                                child: Container(
-                                                  height: 30,
-                                                  child: Text(
-                                                    state
-                                                        .newsList![state.newsList!
-                                                            .indexOf(i)]
-                                                        .title,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: SizeConfig
-                                                                .textMultiplier *
-                                                            2,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.deepOrange),
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                bottom: 5,
-                                                left: 10,
-                                                right: 10,
-                                                child: Container(
-                                                  height: 30,
-                                                  child: Text(
-                                                    state
-                                                        .newsList![state.newsList!
-                                                            .indexOf(i)]
-                                                        .description,
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color: Colors.white54,
-                                                        fontStyle:
-                                                            FontStyle.italic,
-                                                        fontSize: SizeConfig
-                                                                .textMultiplier *
-                                                            1.27),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: RecentNewsBox(
+                          state: state,
+                          element: i,
+                        )
                       );
                     },
                   );
                 }).toList(),
               );
-            } else if (!snapshot.hasData) {
+            } else if (state is LoadingRecentNewsState) {
               return Center(child: CircularProgressIndicator());
             }
-            if (snapshot.hasError) {
+            else if (state is RecentNewsError) {
               return Center(child: Text('Something went wrong :('));
             }
-            if (snapshot.data is RecentNewsError) {
+            else {
               return Center(child: Text("No news available."));
-            } else {
-              return Center(child: Text("UNKNOWN"));
             }
-          }),
+}
     );
   }
 }
 
-class NewsListView extends StatefulWidget {
-  final NewsState state;
+class RecentNewsBox extends StatefulWidget {
+  final RecentNewsFetched state;
+  final NewsModel element;
+
+  RecentNewsBox({required this.state, required this.element});
+
+  @override
+  _RecentNewsBoxState createState() => _RecentNewsBoxState();
+}
+
+class _RecentNewsBoxState extends State<RecentNewsBox> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Center(
+          child: Container(
+            height: SizeConfig.heightMultiplier * 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                      child: Image.network(
+                        widget.state
+                            .newsList![
+                        widget.state.newsList!.indexOf(widget.element)]
+                            .img,
+                        fit: BoxFit.fill,
+                        height: SizeConfig.screenHeight * 100,
+                        width: SizeConfig.screenWidth * 100,
+                      )),
+                ),
+                Wrap(
+                  children: <Widget>[
+                    Container(
+                      height:
+                      SizeConfig.heightMultiplier * 10,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                            top: 10,
+                            left: 10,
+                            right: 10,
+                            child: Container(
+                              height: 30,
+                              child: Text(
+                                widget.state
+                                    .newsList![widget.state.newsList!
+                                    .indexOf(widget.element)]
+                                    .title,
+                                maxLines: 1,
+                                overflow:
+                                TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: SizeConfig
+                                        .textMultiplier *
+                                        2,
+                                    fontWeight:
+                                    FontWeight.bold,
+                                    color: Colors.deepOrange),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 5,
+                            left: 10,
+                            right: 10,
+                            child: Container(
+                              height: 30,
+                              child: Text(
+                                widget.state
+                                    .newsList![widget.state.newsList!
+                                    .indexOf(widget.element)]
+                                    .description,
+                                maxLines: 2,
+                                overflow:
+                                TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: Colors.white54,
+                                    fontStyle:
+                                    FontStyle.italic,
+                                    fontSize: SizeConfig
+                                        .textMultiplier *
+                                        1.27),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class NewsListView<T> extends StatefulWidget {
+  final T state;
 
   NewsListView({required this.state});
 

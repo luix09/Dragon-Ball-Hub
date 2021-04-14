@@ -1,8 +1,18 @@
 import 'package:dragonballhub/models/news_model.dart';
-import 'news_states.dart';
 
-class VideogamesNewsFetched extends NewsState {
-  VideogamesNewsFetched(List<NewsModel> newsList) : super(newsList: newsList);
+abstract class VideogamesState {}
+
+class InitialVideogamesState extends VideogamesState {
+  InitialVideogamesState();
+}
+
+class LoadingVideogamesState extends VideogamesState {
+  LoadingVideogamesState();
+}
+
+class VideogamesNewsFetched extends VideogamesState {
+  final List<NewsModel>? newsList;
+  VideogamesNewsFetched({required this.newsList});
 
   @override
   bool operator ==(Object o) {
@@ -15,9 +25,9 @@ class VideogamesNewsFetched extends NewsState {
   int get hashCode => newsList.hashCode;
 }
 
-class VideogamesNewsError extends NewsState {
+class VideogamesNewsError extends VideogamesState {
   String errorMsg;
-  VideogamesNewsError({required this.errorMsg}) : super(newsList: null);
+  VideogamesNewsError({required this.errorMsg});
 
   @override
   bool operator ==(Object o) {

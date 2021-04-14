@@ -1,5 +1,4 @@
 import 'package:dragonballhub/models/auth_manager.dart';
-import 'package:dragonballhub/models/news_gateway.dart';
 import 'package:dragonballhub/models/user_manager.dart';
 import 'package:dragonballhub/repository/auth_helper.dart';
 import 'package:dragonballhub/repository/api_news.dart';
@@ -54,12 +53,6 @@ final registrationProvider = StateNotifierProvider<UserSignUpData>((ref) {
   return userSignUp;
 });
 
-
 final newsProvider = FutureProvider<ApiNews>((ref) async {
   return ApiNews();
-});
-
-final newsGatewayProvider = StateNotifierProvider<NewsGateway>((ref) {
-  final apiProvider = ref.watch(newsProvider);
-  return NewsGateway(api: apiProvider.data!.value);
 });
