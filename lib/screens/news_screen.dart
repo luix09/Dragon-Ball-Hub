@@ -1,8 +1,10 @@
 import 'package:dragonballhub/custom_widgets/dbh_drawer.dart';
 import 'package:dragonballhub/custom_widgets/news_widgets.dart';
+import 'package:dragonballhub/custom_widgets/search_page_widgets.dart';
 import 'package:dragonballhub/models/news_state_notifiers/manganews_state_notifier.dart';
 import 'package:dragonballhub/providers/all_news_providers.dart';
 import 'package:dragonballhub/providers/top_level_provider.dart';
+import 'package:dragonballhub/screens/search_news_page.dart';
 import 'package:dragonballhub/states/db_states.dart';
 import 'package:dragonballhub/states/dbsuper_states.dart';
 import 'package:dragonballhub/states/dbz_states.dart';
@@ -18,7 +20,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 class NewsScreen extends ConsumerWidget {
   static const id = "/news_screen";
-  late NewsState mangaStateNews;
 
   void loadNewsStates(ScopedReader watch) {
     final recentProvider = watch(recentNewsProvider);
@@ -27,6 +28,7 @@ class NewsScreen extends ConsumerWidget {
     final dbZNewsProvider = watch(dbZProvider);
     final dbNewsProvider = watch(dbProvider);
     final videogamesNewsProvider = watch(videogamesProvider);
+
     recentProvider.getRecentNews();
     mangaNewsProvider.getMangaNews();
     dbSuperNewsProvider.getDbSuperNews();
@@ -67,10 +69,10 @@ class NewsScreen extends ConsumerWidget {
               SliverAppBar(
                 toolbarHeight: SizeConfig.heightMultiplier * 8,
                 title: Padding(
-                  padding: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 0),
                   child: Image.asset(
                     "res/sfera_4.png",
-                    height: SizeConfig.heightMultiplier * 8.5,
+                    height: SizeConfig.heightMultiplier * 7.5,
                   ),
                 ),
                 actions: [ProfilePictureAvatar()],
@@ -114,26 +116,34 @@ class _NewsDashboardState extends State<NewsDashboard> {
             child: Column(
               children: [
                 WelcomeBackWidget(height: SizeConfig.heightMultiplier * 17),
+                Container(
+                  child: GestureDetector(
+                    child: Hero(
+                      tag: 'search',
+                      child: SearchBar(
+                        hintText: "Search news",
+                        isEnabled: false,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, SearchNewsPage.id);
+                    },
+                  ),
+                ),
+                SizedBox(height:20),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5.0),
                   child: Row(
                     children: [
                       Text(
                         "Recent News",
                         style: GoogleFonts.nunito(
                           letterSpacing: 0,
-                          fontSize: SizeConfig.textMultiplier * 3.2,
+                          fontSize: SizeConfig.textMultiplier * 3,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       Expanded(child: Container()),
-                      IconButton(
-                        icon: Icon(
-                            Icons.search,
-                            color: Colors.black,
-                            size: SizeConfig.imageSizeMultiplier * 4),
-                        onPressed: () {},
-                      ),
                     ],
                   ),
                 ),
@@ -152,7 +162,7 @@ class _NewsDashboardState extends State<NewsDashboard> {
                         "All News",
                         style: GoogleFonts.nunito(
                           letterSpacing: 0,
-                          fontSize: SizeConfig.textMultiplier * 3.2,
+                          fontSize: SizeConfig.textMultiplier * 3,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

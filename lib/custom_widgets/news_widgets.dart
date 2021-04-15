@@ -165,11 +165,11 @@ class ProfilePictureAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 2.0),
+      padding: const EdgeInsets.only(right: 5.0),
       child: IconButton(
-        iconSize: SizeConfig.imageSizeMultiplier * 10,
+        iconSize: SizeConfig.imageSizeMultiplier * 9,
         icon: CircleAvatar(
-          radius: SizeConfig.imageSizeMultiplier * 6,
+          radius: SizeConfig.imageSizeMultiplier * 5.5,
           backgroundImage: AssetImage("res/vegeth.jpg"),
         ),
         onPressed: () {

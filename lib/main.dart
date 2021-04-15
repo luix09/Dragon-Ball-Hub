@@ -4,6 +4,7 @@ import 'package:dragonballhub/screens/gallery_screen.dart';
 import 'package:dragonballhub/screens/news_screen.dart';
 import 'package:dragonballhub/screens/pre_login_screen.dart';
 import 'package:dragonballhub/screens/profile_screen.dart';
+import 'package:dragonballhub/screens/search_news_page.dart';
 import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:dragonballhub/screens/settings_screen.dart';
 import 'package:dragonballhub/screens/wiki_screen.dart';
@@ -51,7 +52,7 @@ class _MyAppState extends State<MyApp> {
               SizeConfig.init(constraints, orientation);
 
               return MaterialApp(
-                debugShowCheckedModeBanner: true,
+                debugShowCheckedModeBanner: false,
                 theme: buildTheme(),
                 title: title,
                 initialRoute: '/start',
@@ -65,6 +66,7 @@ class _MyAppState extends State<MyApp> {
                   RegisterScreen.id: (context) => RegisterScreen(),
                   ForgotPassword.id: (context) => ForgotPassword(),
                   NewsScreen.id: (context) => NewsScreen(),
+                  SearchNewsPage.id: (context) => SearchNewsPage(hintText: "Search news"),
                   WikiScreen.id: (context) => WikiScreen(),
                   GalleryScreen.id: (context) => GalleryScreen(),
                   ProfileScreen.id: (context) => ProfileScreen(),
