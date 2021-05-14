@@ -1,9 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dragonballhub/models/news_model.dart';
 import 'package:dragonballhub/providers/all_news_providers.dart';
-import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/screens/webview_news_screen.dart';
-import 'package:dragonballhub/states/news_states.dart';
 import 'package:dragonballhub/states/recent_news.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +29,7 @@ class WelcomeBackWidget extends StatelessWidget {
               "Welcome back, Luigi",
               style: GoogleFonts.nunito(
                 letterSpacing: 0,
-                fontSize: SizeConfig.textMultiplier * 3.8,
+                fontSize: SizeConfig.textMultiplier * 3.5,
                 fontWeight: FontWeight.w300,
               ),
             ),
@@ -372,7 +370,6 @@ class NewsListView<T> extends StatefulWidget {
 class _NewsListViewState extends State<NewsListView> {
   @override
   Widget build(BuildContext context) {
-    print(widget.state.newsList);
     return ListView.builder(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),

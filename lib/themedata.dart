@@ -10,7 +10,7 @@ ThemeData buildTheme() {
       hintColor: Colors.grey,
       backgroundColor: Colors.white,
       iconTheme: IconThemeData(
-        color: Colors.black
+        color: Colors.white
       )
   );
 }

@@ -108,6 +108,7 @@ class _MyBlinkingButtonState extends State<MyBlinkingButton>
           iconSize: SizeConfig.heightMultiplier * 8,
           icon: Icon(
             Icons.arrow_downward,
+            color: Colors.black,
           ),
           onPressed: () {
             Navigator.of(context).push(_createRoute());

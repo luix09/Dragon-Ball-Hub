@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DisplayNewsScreen extends StatelessWidget {
-  String urlPage;
-  Completer<WebViewController> _controller = Completer<WebViewController>();
+  final String urlPage;
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
 
   DisplayNewsScreen({required this.urlPage});
 

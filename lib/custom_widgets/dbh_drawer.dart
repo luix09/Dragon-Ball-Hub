@@ -1,119 +1,106 @@
-import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/screens/gallery_screen.dart';
 import 'package:dragonballhub/screens/news_screen.dart';
-import 'package:dragonballhub/screens/profile_screen.dart';
 import 'package:dragonballhub/screens/settings_screen.dart';
 import 'package:dragonballhub/screens/wiki_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MenuEntry {
   String name;
   Icon icon;
-  String route;
+  String? route;
 
-  MenuEntry({required this.name, required this.icon, required this.route});
+  MenuEntry({required this.name, required this.icon, this.route});
 }
 
 class DbhDrawer extends StatelessWidget {
   final List<MenuEntry> menuElements = [
     MenuEntry(
-        name: "News",
-        icon: Icon(Icons.new_releases_sharp),
+        name: "NEWS",
+        icon: Icon(Icons.new_releases_sharp, color: Colors.white),
         route: NewsScreen.id),
     MenuEntry(
-        name: "Wiki",
-        icon: Icon(Icons.library_books_rounded),
+        name: "WIKI",
+        icon: Icon(Icons.library_books_rounded, color: Colors.white),
         route: WikiScreen.id),
     MenuEntry(
-        name: "Gallery",
-        icon: Icon(Icons.video_collection_rounded),
+        name: "GALLERY",
+        icon: Icon(Icons.video_collection_rounded, color: Colors.white,),
         route: GalleryScreen.id),
     MenuEntry(
-        name: "Profile",
-        icon: Icon(Icons.person),
-        route: ProfileScreen.id),
-    MenuEntry(
-        name: "Settings",
-        icon: Icon(Icons.settings),
+        name: "SETTINGS",
+        icon: Icon(Icons.settings, color: Colors.white),
         route: SettingsScreen.id),
+    MenuEntry(
+        name: "LOGOUT",
+        icon: Icon(Icons.logout, color: Colors.white),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 15),
+        color: Color(0xFFFF8A00),
+        padding: EdgeInsets.symmetric(vertical: 5),
         height: SizeConfig.screenHeight,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "res/sfera_4.png",
-                      height: SizeConfig.imageSizeMultiplier * 12,
+                    Text("v1.0.0", style: TextStyle(
+                      fontSize: 17,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w300
+                    )),
+                    Center(
+                      child: Image.asset(
+                          "res/sfera_4.png",
+                          width: SizeConfig.imageSizeMultiplier * 12,
+                        ),
                     ),
-                    SizedBox(height: SizeConfig.heightMultiplier * 2),
-                    Text(
-                      "DragonBall Hub",
-                      style: GoogleFonts.nunito(
-                          letterSpacing: 0,
-                          fontSize: SizeConfig.textMultiplier * 1.9,
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(
-                                color: Colors.amber,
-                                blurRadius: 0,
-                                offset: Offset(1.2, 1))
-                          ]),
-                    ),
-                    Text("v1.0.0"),
-                    SizedBox(height: SizeConfig.heightMultiplier),
-                    Divider(),
+                    IconButton(onPressed: (){}, icon: Icon(Icons.close))
                   ],
                 ),
               ),
+            SizedBox(height: SizeConfig.heightMultiplier * 4.5,),
             Flexible(
               flex: 4,
               child: Container(
-                  child: ListView.separated(
+                  child: ListView.builder(
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: menuElements[index].icon,
-                    title: Text(
-                      menuElements[index].name,
-                      style: TextStyle(
-                        fontSize: SizeConfig.textMultiplier * 2.2,
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    child: Container(
+                      color: Color(0xFFEE8100),
+                      child: ListTile(
+                        trailing: menuElements[index].icon,
+                        title: Text(
+                          menuElements[index].name,
+                          style: TextStyle(
+                            fontSize: SizeConfig.textMultiplier * 2.2,
+                            color: Colors.white
+                          ),
+                        ),
+                        dense: true,
+                        onTap: () {
+                          Navigator.popAndPushNamed(context, menuElements[index].route!);
+                        },
                       ),
                     ),
-                    onTap: () {
-                      Navigator.popAndPushNamed(context, menuElements[index].route);
-                    },
                   );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider();
                 },
                 itemCount: menuElements.length,
                 padding: EdgeInsets.zero,
               )),
             ),
-            IconButton(
-                icon: Icon(
-                  Icons.logout,
-                  size: SizeConfig.heightMultiplier * 4,
-                ),
-                onPressed: () {
-                  context.read(userAuthProvider).signOut();
-                })
           ],
         ),
       ),

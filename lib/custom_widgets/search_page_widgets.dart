@@ -23,6 +23,10 @@ class _SearchBarState extends State<SearchBar> {
         decoration: BoxDecoration(
           color: Color(0xFFF3F3F3),
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            width: 0.6,
+              color: Colors.black
+          )
         ),
         child: TextField(
           cursorRadius: Radius.circular(50),

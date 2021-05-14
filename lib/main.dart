@@ -3,7 +3,6 @@ import 'package:dragonballhub/screens/forgot_password.dart';
 import 'package:dragonballhub/screens/gallery_screen.dart';
 import 'package:dragonballhub/screens/news_screen.dart';
 import 'package:dragonballhub/screens/pre_login_screen.dart';
-import 'package:dragonballhub/screens/profile_screen.dart';
 import 'package:dragonballhub/screens/search_news_page.dart';
 import 'package:dragonballhub/screens/sign_up_screen.dart';
 import 'package:dragonballhub/screens/settings_screen.dart';
@@ -14,7 +13,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'logger.dart';
 
 Future<void> main() async {
@@ -46,11 +44,11 @@ class _MyAppState extends State<MyApp> {
     precacheImage(AssetImage("res/background_prelogin-min.jpg"), context);
     precacheImage(AssetImage("res/logo-dragonballz.png"), context);
     precacheImage(AssetImage("res/goku-greeting.png"), context);
+
     return LayoutBuilder(
         builder: (context, constraints) =>
             OrientationBuilder(builder: (context, orientation) {
               SizeConfig.init(constraints, orientation);
-
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 theme: buildTheme(),
@@ -66,10 +64,11 @@ class _MyAppState extends State<MyApp> {
                   RegisterScreen.id: (context) => RegisterScreen(),
                   ForgotPassword.id: (context) => ForgotPassword(),
                   NewsScreen.id: (context) => NewsScreen(),
-                  SearchNewsPage.id: (context) => SearchNewsPage(hintText: "Search news"),
+                  SearchNewsPage.id: (context) => SearchNewsPage(
+                      hintText: "Search news"
+                  ),
                   WikiScreen.id: (context) => WikiScreen(),
                   GalleryScreen.id: (context) => GalleryScreen(),
-                  ProfileScreen.id: (context) => ProfileScreen(),
                 }
               );
             }));

@@ -40,15 +40,18 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TopCenterBallLogo(),
+              Flexible(flex: 1,child: TopCenterBallLogo()),
               SizedBox(height: SizeConfig.heightMultiplier * 5),
-              Material(
-                elevation: 7.0,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 30, horizontal: 20),
-                  child: LoginFormWidget(),
+              Expanded(
+                flex: 2,
+                child: Material(
+                  elevation: 7.0,
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 30, horizontal: 20),
+                    child: LoginFormWidget(),
+                  ),
                 ),
               )
             ],
@@ -99,83 +102,94 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-              validator: (value) => _validateEmail(value!),
+          Expanded(
+            flex: 3,
+            child: TextFormField(
+                validator: (value) => _validateEmail(value!),
+                onChanged: (value) =>
+                context
+                    .read(userModel)
+                    .email = value,
+                decoration: new InputDecoration(
+                    icon: Icon(Icons.email),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25))
+                    ),
+                    contentPadding:
+                    EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                    hintText: "Email")
+            ),
+          ),
+          SizedBox(height: SizeConfig.heightMultiplier * 3.5),
+          Expanded(
+            flex: 3,
+            child: TextFormField(
+              obscureText: !_showPassword,
+              validator: (value) => _validatePassword(value!),
               onChanged: (value) =>
               context
                   .read(userModel)
-                  .email = value,
+                  .password= value,
               decoration: new InputDecoration(
-                  icon: Icon(Icons.email),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showPassword = !_showPassword;
+                    });
+                  },
+                  child: Icon(
+                    _showPassword ? Icons.visibility : Icons.visibility_off
+                  ),
+                ),
+                icon: Icon(Icons.lock_outline),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25))
+                    borderRadius: BorderRadius.all(Radius.circular(25))
                   ),
                   contentPadding:
-                  EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                  hintText: "Email")
-          ),
-          SizedBox(height: SizeConfig.heightMultiplier * 3.5),
-          TextFormField(
-            obscureText: !_showPassword,
-            validator: (value) => _validatePassword(value!),
-            onChanged: (value) =>
-            context
-                .read(userModel)
-                .password= value,
-            decoration: new InputDecoration(
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _showPassword = !_showPassword;
-                  });
-                },
-                child: Icon(
-                  _showPassword ? Icons.visibility : Icons.visibility_off
-                ),
-              ),
-              icon: Icon(Icons.lock_outline),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25))
-                ),
-                contentPadding:
-                EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
-                hintText: "Password"),
+                  EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 15),
+                  hintText: "Password"),
+            ),
           ),
           SizedBox(height: 10),
           Align(
               alignment: Alignment.centerRight,
               child: ForgotPasswordButton()),
           SizedBox(height: SizeConfig.heightMultiplier * 3.5),
-          LoginButtonWidget(_formKey),
-          SizedBox(height: 15),
-          RegisterTextButton(),
+          Expanded(
+              flex: 3,
+              child: LoginButtonWidget(_formKey)),
+          SizedBox(height: 10),
+          Flexible(child: RegisterTextButton()),
           SizedBox(height: 20),
-          SocialDivider(),
+          Flexible(child: SocialDivider()),
           SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GoogleAuthButton(
-                onPressed: () async {
-                  final googleProvider = context.read(loginProvider);
-                  await googleProvider.signInWithGoogle();
-                },
-                darkMode: false,
-                style: AuthButtonStyle.icon,
-                iconSize: SizeConfig.imageSizeMultiplier * 6,
-                height: SizeConfig.heightMultiplier * 6,
-                width: SizeConfig.heightMultiplier * 6,
-              ),
-              SizedBox(width: 10),
-              FacebookAuthButton(
-                onPressed: () {},
-                darkMode: false,
-                style: AuthButtonStyle.icon,
-                iconSize: SizeConfig.imageSizeMultiplier * 6,
-                height: SizeConfig.heightMultiplier * 6,
-                width: SizeConfig.heightMultiplier * 6,
-              ),
-            ],
+          Flexible(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GoogleAuthButton(
+                  onPressed: () async {
+                    final googleProvider = context.read(loginProvider);
+                    await googleProvider.signInWithGoogle();
+                  },
+                  darkMode: false,
+                  style: AuthButtonStyle.icon,
+                  iconSize: SizeConfig.imageSizeMultiplier * 6,
+                  height: SizeConfig.heightMultiplier * 7,
+                  width: SizeConfig.heightMultiplier * 7,
+                ),
+                SizedBox(width: 10),
+                FacebookAuthButton(
+                  onPressed: () {},
+                  darkMode: false,
+                  style: AuthButtonStyle.icon,
+                  iconSize: SizeConfig.imageSizeMultiplier * 6,
+                  height: SizeConfig.heightMultiplier * 7,
+                  width: SizeConfig.heightMultiplier * 7,
+                ),
+              ],
+            ),
           )
         ],
       ),

@@ -1,5 +1,4 @@
 import 'package:dragonballhub/repository/api_news.dart';
-import 'package:dragonballhub/states/db_states.dart';
 import 'package:dragonballhub/states/dbz_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../news_parser.dart';
