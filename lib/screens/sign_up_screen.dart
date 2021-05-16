@@ -213,7 +213,7 @@ class AlertDialogSignUpWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: ListTile(
-        leading: Image.asset("res/sfera-4.png", height: SizeConfig.imageSizeMultiplier * 10,),
+        leading: Image.asset("res/sfera_4.png", height: SizeConfig.imageSizeMultiplier * 10,),
         contentPadding: EdgeInsets.zero,
         title: Text(title, style: TextStyle(
           fontWeight: FontWeight.bold,

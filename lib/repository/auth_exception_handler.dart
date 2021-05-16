@@ -87,7 +87,7 @@ class AuthExceptionHandler {
         "The email has already been registered. Please login or reset your password.";
         break;
       case AuthResultStatus.emailNotVerified:
-        errorMessage = "The email is not verified yet! Check your email.";
+        errorMessage = "This email is not verified yet! Check your email.";
         break;
       default:
         errorMessage = "An undefined error happened.";

@@ -1,8 +1,10 @@
+import 'package:dragonballhub/providers/top_level_provider.dart';
 import 'package:dragonballhub/screens/gallery_screen.dart';
 import 'package:dragonballhub/screens/news_screen.dart';
 import 'package:dragonballhub/screens/settings_screen.dart';
 import 'package:dragonballhub/screens/wiki_screen.dart';
 import 'package:dragonballhub/utils/layout_responsiveness.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -76,6 +78,28 @@ class DbhDrawer extends StatelessWidget {
               child: Container(
                   child: ListView.builder(
                 itemBuilder: (context, index) {
+                  if (menuElements[index].name == "LOGOUT") {
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      child: Container(
+                        color: Color(0xFFEE8100),
+                        child: ListTile(
+                          trailing: menuElements[index].icon,
+                          title: Text(
+                            menuElements[index].name,
+                            style: TextStyle(
+                                fontSize: SizeConfig.textMultiplier * 2.2,
+                                color: Colors.white
+                            ),
+                          ),
+                          dense: true,
+                          onTap: () {
+                            context.read(userAuthProvider).signOut();
+                          },
+                        ),
+                      ),
+                    );
+                  }
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: 5),
                     child: Container(
