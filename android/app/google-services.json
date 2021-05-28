@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1032989183620",
+    "project_id": "dragon-ball-hub",
+    "storage_bucket": "dragon-ball-hub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032989183620:android:c5db48d1cf1adbf2c8fcd1",
+        "android_client_info": {
+          "package_name": "com.enigmart.dragonballhub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032989183620-mfa36ho59mii0g53ocj7aroh7pgrkbc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enigmart.dragonballhub",
+            "certificate_hash": "869e13ccab6b98717920a356e01f2dc49a94e4ff"
+          }
+        },
+        {
+          "client_id": "1032989183620-2ka3alo21a9csk3mlftevcja6s305p3q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApqVREEa-SL8CRjZjvVdMDYbuubpBAP0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032989183620-2ka3alo21a9csk3mlftevcja6s305p3q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
